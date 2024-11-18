@@ -127,7 +127,9 @@ buyer:
 	/order-items/:id
 
 	[GET]
-	/products/filter?catetoryId=..&rating_gt=..&rating_lt=..&price_gt=..&prict_lt=..
+	/products/filter?catetoryId=..&rating_gt=..&rating_lt=..&price_gt=..&prict_lt=..&page=..&page_size=..
+		output:
+			{products: [Product], totalPage: Number}
 
 	[POST - any buyer can do review -> do not need to buy product]
 	/products/:productId/reviews
