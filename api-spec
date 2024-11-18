@@ -2,7 +2,7 @@
 Entity
 Category: {id: Number, name: String}
 Product: {id: Number, name: String, category: String, description: String, quantity: Number, price: Number, sellerId: Number, categoryId: Number }
-Review: {id: Number, content: String, reating: Number }
+Review: {id: Number, content: String, rating: Number } // rating 0, 0.5, 1, 1.5, ..., 5
 
 // paid
 Order: {id Number, buyerId: Number, date: DateTime, items: [OrderItem] }
@@ -131,3 +131,5 @@ buyer:
 
 	[POST - any buyer can do review -> do not need to buy product]
 	/products/:productId/reviews
+		input:
+			{content: String, rating: Number}
