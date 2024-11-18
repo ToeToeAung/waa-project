@@ -1,0 +1,133 @@
+
+Entity
+Category: {id: Number, name: String}
+Product: {id: Number, name: String, category: String, description: String, quantity: Number, price: Number, sellerId: Number, categoryId: Number }
+Review: {id: Number, content: String, reating: Number }
+
+// paid
+Order: {id Number, buyerId: Number, date: DateTime, items: [OrderItem] }
+OrderItem: { id: Number, productId: Number, quantity: Number, state: oneof("pending", "shiping", "delivered")}
+
+// wish list
+Cart: {id: Number, buyerId: Number, items: [CartItem]}
+CartItem: {id: Number, cartId: Number, productId: String, quantity: Number}
+
+User: {id: Number, username: String, password: String, role: oneof("admin", "seller", "buyer"), address: Address}
+SellerStatus: {id: Number, userId: Number, status: SellerStatusEnum} // only for seller (approved seller can sell product)
+Address: { id: Number, zipcode: String, street: String, city: String, userId: Number }
+
+SellerStatusEnum: oneof("pending", "approved")
+
+api
+	[POST]
+	/register
+		input: 
+			{username: String, role: oneof("seller", "buyer"), password: String, address: Address}
+		output:
+			token: String
+
+	[POST - login]
+	/autenticate
+		input:
+			{username: String, password: String}
+		output:
+			token: String
+
+	[POST - put token in header]
+	/logout
+
+	[GET - puth token in header]
+	/me
+		output:
+		 {id: Number, username: String, role: oneof("seller", "buyer", "admin"), address: Address, sellerStatus: nullable(SellerStatusEnum)}
+		
+
+	[GET]
+	/products/:productId/reviews
+		output:
+			[Review]
+
+	[GET]
+	/categories
+		output:
+			[Category]
+
+
+admin:
+	[GET - return only pending sellers]
+	/admin/sellers
+		output:
+		 [User]
+
+	[POST - approve seller]
+	/admin/sellers/:sellerId
+
+	[DELETE]
+	/admin/reviews/:id
+
+	[POST - crete category]
+	/admin/categories
+	 input:
+	 	{name: String}
+
+
+
+seller:
+	[GET]
+	/seller/products
+
+	[GET]
+	/seller/products/:id
+
+	[POST - create product]
+	/seller/products
+		input:
+			{name: String, categoryId: Number, description: String, quantity: Number, price: Number, categoryId: Number}
+
+	[POST - update product (can manage stock quantity here)]
+	/seller/products/:id
+
+	[DETETE]
+	/seller/products/:id
+
+	[GET - return order item for specific seller]
+	/seller/order-items
+
+	[POST - change order status]
+	/seller/order-items/:id
+
+
+buyer:
+	[GET - token in header]
+	/cart
+		output:
+			[CartItem]
+
+	[POST - add product to cart, token in header]
+	/cart
+	 	input:
+			[{productId: Number, quantity: Number}]
+
+	[DELETE - remove product from cart]
+	/cart
+		input:
+		  [{productId: Number}]
+
+	[GET - get all order history]
+	/orders
+		output:
+			[Order]
+
+	[POST - place order] // purchase flow: 1. add to cart, 2. place order ---> remove cartItem in database and create orderItem 
+	/orders
+		input:
+			[{cartItemId: Number}]
+
+	[DELETE - cancle order item that is not shipping]
+	/order-items/:id
+
+	[GET]
+	/products/filter?catetoryId=..&rating_gt=..&rating_lt=..&price_gt=..&prict_lt=..
+
+	[POST - any buyer can do review -> do not need to buy product]
+	/products/:productId/reviews
