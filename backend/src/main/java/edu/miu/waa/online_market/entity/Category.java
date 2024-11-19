@@ -1,4 +1,4 @@
-package edu.miu.demo.entity;
+package edu.miu.waa.online_market.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
