@@ -23,7 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
         this.productRepo = productRepo;
     }
     @Override
-    public void create(Review review, long productId) {
+    public void create(Review review, Long productId) {
         Product product = productService.getProduct(productId);
         product.getReviews().add(review);
         reviewRepo.save(review);

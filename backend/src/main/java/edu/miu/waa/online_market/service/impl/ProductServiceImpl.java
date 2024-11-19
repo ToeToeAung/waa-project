@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
         this.modelMapper = modelMapper;
     }
     @Override
-    public void createProduct(ProductDto productdto, long categoryId, long userId){
+    public void createProduct(ProductDto productdto, Long categoryId, Long userId){
         Category category = categoryService.findById(categoryId);
 
         User user = userService.findById(userId);
@@ -61,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(long id, int quantity){
+    public void updateProduct(Long id, int quantity){
         Product product = getProduct(id);
         product.setQuantity(quantity);
         productRepo.save(product);

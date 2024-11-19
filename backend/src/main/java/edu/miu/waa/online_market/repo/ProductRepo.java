@@ -13,8 +13,8 @@ import java.util.List;
 public interface ProductRepo extends JpaRepository<Product, Long> {
     Product save(Product product);
     List<Product> findAll();
-    Product findById(long id);
-    void deleteById(long id);
+    //Product findById(Long id);
+    void deleteById(Long id);
     @Query("Select r From Product p Join p.reviews r Where p.id = :id")
     List<Review> findReviewsByProductId(Long id);
 }
