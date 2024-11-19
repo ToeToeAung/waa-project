@@ -1,51 +1,41 @@
 package edu.miu.waa.online_market.controller;
+
+import edu.miu.waa.online_market.entity.Address;
 import edu.miu.waa.online_market.entity.User;
-import edu.miu.waa.online_market.entity.dto.UserDto;
 import edu.miu.waa.online_market.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
 @CrossOrigin(origins = {"*"})
-
 public class UserController {
-
     private final UserService userService;
-
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public void save(@RequestBody UserDto p) {
-        userService.save(p);
+    @PostMapping("/register")
+    public void save(@RequestBody User user) {
+        Address address = new Address(user.getAddress().getStreet(), user.getAddress().getCity(),
+                user.getAddress().getState(), user.getAddress().getZip());
+        User newUser = new User(user.getUsername(), user.getPassword(), user.getRole(), address);
+        userService.createUser(newUser);
     }
 
-    @GetMapping
-    public List<User> getAll() {
+    @GetMapping()
+    public List<User> findAll() {
         return userService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable long id) {
-        var user = userService.getById(id);
-        return ResponseEntity.ok(user);
+    @GetMapping("/me")
+    public User findOne(@RequestParam Long id) {
+        return userService.findById(id);
     }
-
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable long id) {
-        userService.delete(id);
-    }
-
 
 
 }
