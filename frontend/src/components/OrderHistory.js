@@ -1,4 +1,13 @@
-import { Box, Paper, Typography } from "@mui/material"
+import {
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Typography,
+} from "@mui/material"
 import React, { useState, useEffect } from "react"
 import {
   ORDER_ALL,
@@ -7,6 +16,8 @@ import {
   ORDER_DELIVERED,
   ORDER_CANCLED,
 } from "../entity/OrderStatus"
+import { Cancel, Folder } from "@mui/icons-material"
+import {} from "@mui/lab"
 
 const getOrders = () => {
   return Promise.resolve(
@@ -106,6 +117,27 @@ function Order({ order }) {
   return (
     <Paper sx={{ p: 2 }} variant="outlined">
       <Typography>Invoice No. {order.id}</Typography>
+      <List>
+        {order.items.map((oi) => (
+          <OrderItem key={oi.id} item={oi} />
+        ))}
+      </List>
     </Paper>
+  )
+}
+
+const status = ["pending", "shipping", "delivered"]
+
+function OrderItem({ item }) {
+  return (
+    <ListItem
+      secondaryAction={
+        <IconButton edge="end">
+          <Cancel />
+        </IconButton>
+      }
+    >
+      <ListItemText primary={item.product.name} />
+    </ListItem>
   )
 }
