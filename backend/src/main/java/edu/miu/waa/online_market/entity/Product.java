@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @Entity
 @NoArgsConstructor
@@ -15,13 +18,17 @@ public class Product {
     private int quantity;
     private float price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "category_id")
     Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "seller_id")
     User user;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<Review> reviews = new ArrayList<>();
+
 
     public Product(String description, int quantity, float price, Category category, User user) {
         this.description = description;
@@ -29,6 +36,7 @@ public class Product {
         this.price = price;
         this.category = category;
         this.user = user;
+        reviews = new ArrayList<>();
     }
 
 }

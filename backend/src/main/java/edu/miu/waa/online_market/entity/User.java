@@ -21,7 +21,7 @@ public class User {
     private Role role;
     private SellerStatus sellerStatus;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     private Address address;
 
 
