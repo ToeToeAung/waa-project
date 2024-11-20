@@ -8,12 +8,16 @@ import {
   Typography,
 } from "@mui/material"
 import React, { useReducer } from "react"
+import { useLogin } from "../hook/auth"
+import { useNavigate } from "react-router-dom"
 
 const SET_USERNAME = "set_username"
 const SET_PASSWORD = "set_password"
 const TOGGLE_SHOW_PASSWORD = "toggle_show_password"
 
 export function Login() {
+  const login = useLogin()
+  const naviagte = useNavigate()
   const [state, dispatch] = useReducer(
     (state, action) => {
       switch (action.type) {
@@ -72,7 +76,18 @@ export function Login() {
           },
         }}
       />
-      <Button variant="contained">Login</Button>
+      <Button
+        variant="contained"
+        onClick={async () => {
+          await login({
+            username: state.username,
+            password: state.password,
+          })
+          naviagte("/welcome")
+        }}
+      >
+        Login
+      </Button>
     </Paper>
   )
 }

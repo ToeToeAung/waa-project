@@ -13,14 +13,19 @@ import { SellerAddProduct } from "./components/seller/SellerAddProduct"
 import { SellerOrders } from "./components/seller/SellerOrders"
 import { OrderHistory } from "./components/OrderHistory"
 import { CreateCategory } from "./components/admin/CreateCategory"
+import { useInitAuthStore } from "./hook/auth"
+import { Welcome } from "./components/Welcome"
 
 function App() {
+  useInitAuthStore()
+
   return (
     <>
       <BrowserRouter>
         <CssBaseline />
         <Routes>
           <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="/welcome" element={<Welcome />} />
           <Route element={<PageLayout />}>
             <Route path="/products">
               <Route index element={<Products />} />
