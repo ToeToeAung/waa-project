@@ -1,4 +1,5 @@
 package edu.miu.waa.online_market.repo;
+import edu.miu.waa.online_market.entity.SellerStatus;
 import edu.miu.waa.online_market.entity.User;
 import edu.miu.waa.online_market.entity.dto.UserDto;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,5 @@ public interface UserRepo extends JpaRepository<User,Long>  {
     public User getById(long id);
     public List<User> findAll();
     public User findByUsername(String username);
+    List<User> findBySellerStatus(SellerStatus sellerStatus);
 }
