@@ -5,6 +5,7 @@ import edu.miu.waa.online_market.entity.Product;
 import edu.miu.waa.online_market.entity.Review;
 import edu.miu.waa.online_market.entity.User;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
+import edu.miu.waa.online_market.entity.dto.UserDto;
 import edu.miu.waa.online_market.repo.CategoryRepo;
 import edu.miu.waa.online_market.repo.ProductRepo;
 import edu.miu.waa.online_market.service.CategoryService;
@@ -52,6 +53,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProduct(Long id){
+        Product product = productRepo.findById(id).orElse(null);
+        if (product == null) {
+            return null;
+        }
+
+        UserDto userDto = modelMapper.map( product.getUser(), UserDto.class);
+        product.setUser(modelMapper.map(userDto, User.class));
+
         return productRepo.findById(id).orElse(null);
     }
 
