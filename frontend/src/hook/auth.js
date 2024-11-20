@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { getMe, login } from "../api/auth"
+import { getMe, login, logout } from "../api/auth"
 import { authAction } from "../store"
 import { ACCESS_TOKEN } from "../entity/Auth"
 
@@ -32,4 +32,13 @@ export function useLogin() {
     },
     [dispatch],
   )
+}
+
+export function useLogout() {
+  const dispatch = useDispatch()
+
+  return useCallback(async () => {
+    await logout()
+    dispatch(authAction.setMe(null))
+  }, [dispatch])
 }

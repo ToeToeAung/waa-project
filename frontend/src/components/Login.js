@@ -7,15 +7,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import React, { useReducer } from "react"
+import React, { useEffect, useReducer } from "react"
 import { useLogin } from "../hook/auth"
 import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 const SET_USERNAME = "set_username"
 const SET_PASSWORD = "set_password"
 const TOGGLE_SHOW_PASSWORD = "toggle_show_password"
 
 export function Login() {
+  const me = useSelector((state) => state.auth.me)
   const login = useLogin()
   const naviagte = useNavigate()
   const [state, dispatch] = useReducer(
@@ -31,6 +33,17 @@ export function Login() {
     },
     { username: "", password: "", showPassword: false },
   )
+
+  useEffect(() => {
+    const timeId = setTimeout(() => {
+      if (!me) return
+      naviagte("/welcome")
+    }, 500)
+
+    return () => {
+      clearTimeout(timeId)
+    }
+  }, [me])
 
   return (
     <Paper

@@ -1,9 +1,8 @@
 import { ACCESS_TOKEN } from "../entity/Auth"
 import { authAxios, publicAxois } from "./fetcher"
 
-// TODO: remove userId
 export async function getMe() {
-  return authAxios.get(`/users/me?id=${1}`).then((res) => res.data)
+  return authAxios.get("/users/me").then((res) => res.data)
 }
 
 export async function login({ username, password }) {
@@ -18,15 +17,20 @@ export async function login({ username, password }) {
     })
 }
 
+export async function logout() {
+  localStorage.removeItem(ACCESS_TOKEN)
+}
+
 export async function register({
   username,
   password,
+  role,
   address: { street, city, state, zip, country },
 }) {
   return publicAxois.post("/register", {
     username,
     password,
-    role: "SELLER",
+    role,
     address: {
       street,
       city,

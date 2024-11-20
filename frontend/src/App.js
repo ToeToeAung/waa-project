@@ -24,7 +24,7 @@ function App() {
       <BrowserRouter>
         <CssBaseline />
         <Routes>
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/welcome" replace />} />
           <Route path="/welcome" element={<Welcome />} />
           <Route element={<PageLayout />}>
             <Route path="/products">
