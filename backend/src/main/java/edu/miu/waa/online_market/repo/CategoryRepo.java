@@ -10,4 +10,5 @@ import java.util.List;
 public interface CategoryRepo extends JpaRepository<Category, Long> {
     Category save(Category category);
     List<Category> findAll();
+    Category findByName(String name);
 }

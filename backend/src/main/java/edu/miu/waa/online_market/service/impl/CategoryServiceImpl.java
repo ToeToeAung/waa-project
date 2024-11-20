@@ -30,4 +30,8 @@ public class CategoryServiceImpl implements CategoryService {
     public Category findById(Long id){
         return categoryRepo.findById(id).orElse(null);
     }
+    @Override
+    public Category findByName(String name) {
+        return categoryRepo.findByName(name);
+    }
 }

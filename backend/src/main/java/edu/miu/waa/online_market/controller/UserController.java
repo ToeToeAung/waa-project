@@ -1,4 +1,6 @@
 package edu.miu.waa.online_market.controller;
+import edu.miu.waa.online_market.entity.Role;
+import edu.miu.waa.online_market.entity.dto.UserDto;
 import edu.miu.waa.online_market.service.LoggerService;
 import edu.miu.waa.online_market.entity.Address;
 import edu.miu.waa.online_market.entity.User;
@@ -41,6 +43,9 @@ public class UserController {
             error.put("error", Collections.singletonMap("username", "duplicate"));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
         }
+        if(user.getRole().equals(Role.ADMIN)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
         Address address = new Address(user.getAddress().getStreet(), user.getAddress().getCity(),
                 user.getAddress().getState(), user.getAddress().getZip());
@@ -79,5 +84,24 @@ public class UserController {
 
     }
 
+    @GetMapping("/sellers")
+    public List<UserDto> findSellersWithPendingStatus() {
+        User user = userService.findByUsername(CurrentUser.getCurrentUser());
+        if(user.getRole().equals(Role.ADMIN)){
+            return userService.findSellersWithPendingStatus();
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
 
+    @PutMapping("/sellers/{id}")
+    public void approveSeller(@PathVariable Long id) {
+        User user = userService.findByUsername(CurrentUser.getCurrentUser());
+        if(user.getRole().equals(Role.ADMIN)){
+            userService.approveSeller(id);
+        }else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+    }
 }
