@@ -8,7 +8,7 @@ export function PageLayout() {
     <>
       <Navbar />
       <Toolbar />
-      <Container sx={{ marginTop: 4 }}>
+      <Container sx={{ marginTop: 4, marginBottom: 4 }}>
         <Outlet />
       </Container>
     </>

@@ -18,6 +18,7 @@ import {
   ORDER_DELIVERED,
   ORDER_CANCLED,
 } from "../../entity/OrderStatus"
+import { OrderState } from "../OrderState"
 
 const orderItems = [
   {
@@ -128,19 +129,6 @@ function Order({ order: o }) {
       </Box>
     </Paper>
   )
-}
-
-function OrderState({ state }) {
-  switch (state) {
-    case ORDER_PENDING:
-      return <Chip color="primary" label="pending" size="small" />
-    case ORDER_SHIPPING:
-      return <Chip color="warning" label="shipping" size="small" />
-    case ORDER_DELIVERED:
-      return <Chip color="success" label="delivered" size="small" />
-    case ORDER_CANCLED:
-      return <Chip color="error" label="cancled" size="small" />
-  }
 }
 
 function Action({ order: o }) {
