@@ -9,4 +9,5 @@ public interface UserService {
     void createUser(User user);
     List<User> findAll();
     User findById(Long id);
+    User findByUsername(String username);
 }
