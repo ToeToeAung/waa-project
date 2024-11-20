@@ -76,4 +76,16 @@ public class ProductServiceImpl implements ProductService {
     public List<Review> findReviewsByProduct(Long id){
         return productRepo.findReviewsByProductId(id);
     }
+
+    @Override
+    public Boolean subQuantity(Long productId, int quantity){
+        Product product = getProduct(productId);
+        if(quantity <= product.getQuantity()){
+            product.setQuantity(product.getQuantity() - quantity);
+        }else{
+            return false;
+        }
+        productRepo.save(product);
+        return true;
+    }
 }
