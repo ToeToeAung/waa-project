@@ -1,57 +1,28 @@
 import { Box, Button, Paper, Typography } from "@mui/material"
-import React, { useEffect, useState } from "react"
-import { getPendingSeller } from "../../api/admin"
-
-// const sellers = [
-//   {
-//     id: 1,
-//     username: "seller 1",
-//     address: {
-//       id: 1,
-//       zipcode: "zip-1234",
-//       street: "1st street",
-//       city: "CA",
-//     },
-//   },
-//   {
-//     id: 2,
-//     username: "seller 2",
-//     address: {
-//       id: 2,
-//       zipcode: "zip-1234",
-//       street: "1st street",
-//       city: "CA",
-//     },
-//   },
-//   {
-//     id: 3,
-//     username: "seller 3",
-//     address: {
-//       id: 3,
-//       zipcode: "zip-1234",
-//       street: "1st street",
-//       city: "CA",
-//     },
-//   },
-// ]
+import React, { useEffect, useState, useCallback } from "react"
+import { approveSeller, getPendingSeller } from "../../api/admin"
 
 export function ApproveSeller() {
   const [sellers, setSellers] = useState([])
 
-  useEffect(() => {
+  const syncSellers = useCallback(() => {
     getPendingSeller().then((res) => setSellers(res))
-  }, [])
+  }, [setSellers])
+
+  useEffect(() => {
+    syncSellers()
+  }, [syncSellers])
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {sellers.map((s) => (
-        <Seller key={s.id} seller={s} />
+        <Seller key={s.id} seller={s} onApproved={syncSellers} />
       ))}
     </Box>
   )
 }
 
-function Seller({ seller: s }) {
+function Seller({ seller: s, onApproved }) {
   const { address: a } = s
   return (
     <Paper
@@ -61,10 +32,18 @@ function Seller({ seller: s }) {
       <Box>
         <Typography>{s.username}</Typography>
         <Typography>
-          Address: {a.street}, {a.zipcode}, {a.city}
+          Address: {a.street}, {a.zip}, {a.city}, {a.state}
         </Typography>
       </Box>
-      <Button sx={{ flexGrow: 0 }} variant="outlined">
+      <Button
+        sx={{ flexGrow: 0 }}
+        variant="outlined"
+        onClick={() => {
+          approveSeller({ sellerId: s.id }).then(() => {
+            onApproved()
+          })
+        }}
+      >
         Approve
       </Button>
     </Paper>
