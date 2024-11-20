@@ -85,7 +85,7 @@ public class UserController {
     }
 
     @GetMapping("/sellers")
-    public List<UserDto> findSellersWithPendingStatus() {
+    public List<User> findSellersWithPendingStatus() {
         User user = userService.findByUsername(CurrentUser.getCurrentUser());
         if(user.getRole().equals(Role.ADMIN)){
             return userService.findSellersWithPendingStatus();

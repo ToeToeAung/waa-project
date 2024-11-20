@@ -11,6 +11,6 @@ public interface UserService {
     List<User> findAll();
     User findById(Long id);
     User findByUsername(String username);
-    List<UserDto> findSellersWithPendingStatus();
+    List<User> findSellersWithPendingStatus();
     void approveSeller(Long userId);
 }
