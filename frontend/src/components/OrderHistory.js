@@ -1,3 +1,4 @@
+import { Cancel } from "@mui/icons-material"
 import {
   Box,
   Button,
@@ -6,28 +7,17 @@ import {
   IconButton,
   List,
   ListItem,
-  ListItemIcon,
   ListItemText,
   Paper,
   Typography,
 } from "@mui/material"
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import {
-  ORDER_ALL,
+  ORDER_CANCLED,
+  ORDER_DELIVERED,
   ORDER_PENDING,
   ORDER_SHIPPING,
-  ORDER_DELIVERED,
-  ORDER_CANCLED,
 } from "../entity/OrderStatus"
-import { Cancel, Folder } from "@mui/icons-material"
-import {
-  Timeline,
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot,
-  TimelineItem,
-  TimelineSeparator,
-} from "@mui/lab"
 import { OrderState } from "./OrderState"
 
 const getOrders = () => {

@@ -1,4 +1,4 @@
-import { AcUnitOutlined, Visibility, VisibilityOff } from "@mui/icons-material"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 import {
   Button,
   IconButton,
@@ -7,16 +7,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import React, { useReducer, useState } from "react"
+import React, { useReducer } from "react"
+import { useNavigate } from "react-router-dom"
+import { register } from "../api/auth"
+import { useLogin } from "../hook/auth"
 
 const SET_USERNAME = "set_username"
 const SET_PASSWORD = "set_password"
 const SET_ZIPCODE = "set_zipcode"
 const SET_STREET = "set_street"
 const SET_CITY = "set_city"
+const SET_STATE = "set_state"
 const TOGGLE_SHOW_PASSWORD = "toggle_show_password"
 
 export function Register(props) {
+  const login = useLogin()
+  const navigate = useNavigate()
   const [state, dispatch] = useReducer(
     (state, action) => {
       switch (action.type) {
@@ -30,8 +36,12 @@ export function Register(props) {
           return { ...state, street: action.street }
         case SET_CITY:
           return { ...state, city: action.city }
+        case SET_STATE:
+          return { ...state, state: action.state }
         case TOGGLE_SHOW_PASSWORD:
           return { ...state, showPassword: !state.showPassword }
+        default:
+          return state
       }
     },
     {
@@ -40,6 +50,7 @@ export function Register(props) {
       zipcode: "",
       street: "",
       city: "",
+      state: "",
       showPassword: false,
     },
   )
@@ -56,7 +67,7 @@ export function Register(props) {
         margin: "0 auto",
       }}
     >
-      <Typography variant="h5">Register</Typography>
+      <Typography variant="h5">Register {props.role}</Typography>
       <TextField
         label="username"
         value={state.username}
@@ -104,20 +115,28 @@ export function Register(props) {
         value={state.city}
         onChange={(e) => dispatch({ type: SET_CITY, city: e.target.value })}
       />
+      <TextField
+        label="state"
+        value={state.state}
+        onChange={(e) => dispatch({ type: SET_STATE, state: e.target.value })}
+      />
       <Button
         variant="contained"
-        onClick={() => {
+        onClick={async () => {
           const data = {
             username: state.username,
             password: state.password,
             address: {
-              zipcode: state.zipcode,
               street: state.street,
               city: state.city,
+              state: state.state,
+              zip: state.zipcode,
             },
             role: props.role,
           }
-          console.log(data)
+          await register(data)
+          await login({ username: state.username, password: state.password })
+          navigate("/welcome")
         }}
       >
         Register

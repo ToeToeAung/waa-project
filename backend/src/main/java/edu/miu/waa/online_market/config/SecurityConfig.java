@@ -9,6 +9,7 @@ import edu.miu.waa.online_market.filter.JwtFilter;
 import edu.miu.waa.online_market.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -49,14 +50,20 @@ public class SecurityConfig{
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                       // .requestMatchers("/api/v1/posts/**").permitAll()
-                       // .requestMatchers("/api/v1/comments/**").permitAll()
-                 //       .requestMatchers("/api/v1/reviews/**").permitAll()
-                        //.requestMatchers("/api/v1/categories/**").permitAll()
-                        //.requestMatchers("/api/v1/products/**").permitAll()
-                       // .requestMatchers("/api/v1/users/**").permitAll()
-                        .requestMatchers("/api/v1/users/register").permitAll()
+//                        .requestMatchers("/api/v1/posts/**").permitAll()
+//                        .requestMatchers("/api/v1/comments/**").permitAll()
+//                        .requestMatchers("/api/v1/reviews/**").permitAll()
+//                        .requestMatchers("/api/v1/categories/**").permitAll()
+//                        .requestMatchers("/api/v1/products/**").permitAll()
+//                        .requestMatchers("/api/v1/users/**").permitAll(permitAll)
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers("/api/v1/authenticate/**").permitAll()
+                        .requestMatchers("/api/v1/users/register").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/reviews/{id}").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/{id}").permitAll()
+
                         //      .requestMatchers("/api/v1/products").hasAnyAuthority(roles.toArray(new String[0])) // Use dynamic authorities
                         .anyRequest().authenticated()
                 )
