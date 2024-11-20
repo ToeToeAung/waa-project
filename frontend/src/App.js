@@ -12,6 +12,7 @@ import { SellerEditProduct } from "./components/seller/SellerEditProduct"
 import { SellerAddProduct } from "./components/seller/SellerAddProduct"
 import { SellerOrders } from "./components/seller/SellerOrders"
 import { OrderHistory } from "./components/OrderHistory"
+import { CreateCategory } from "./components/admin/CreateCategory"
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/admin">
               <Route path="approve-seller" element={<ApproveSeller />} />
+              <Route path="categories" element={<CreateCategory />} />
             </Route>
             <Route path="/seller">
               <Route path="register" element={<Register role="seller" />} />

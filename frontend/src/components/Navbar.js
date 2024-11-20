@@ -1,4 +1,4 @@
-import Ract from "react"
+import React from "react"
 import { AppBar, Badge, Button, IconButton, Toolbar } from "@mui/material"
 import { Link } from "react-router-dom"
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
@@ -10,6 +10,7 @@ const routes = [
   { name: "create product", route: "/seller/products/new" },
   { name: "manage product", route: "/seller/products" },
   { name: "approve seller", route: "/admin/approve-seller" },
+  { name: "create category", route: "/admin/categories" },
 ]
 
 export function Navbar() {
