@@ -19,7 +19,7 @@ const TOGGLE_SHOW_PASSWORD = "toggle_show_password"
 export function Login() {
   const me = useSelector((state) => state.auth.me)
   const login = useLogin()
-  const naviagte = useNavigate()
+  const navigate = useNavigate()
   const [state, dispatch] = useReducer(
     (state, action) => {
       switch (action.type) {
@@ -29,6 +29,8 @@ export function Login() {
           return { ...state, password: action.password }
         case TOGGLE_SHOW_PASSWORD:
           return { ...state, showPassword: !state.showPassword }
+        default:
+          return state
       }
     },
     { username: "", password: "", showPassword: false },
@@ -37,13 +39,13 @@ export function Login() {
   useEffect(() => {
     const timeId = setTimeout(() => {
       if (!me) return
-      naviagte("/welcome")
+      navigate("/welcome")
     }, 500)
 
     return () => {
       clearTimeout(timeId)
     }
-  }, [me])
+  }, [me, navigate])
 
   return (
     <Paper
@@ -96,7 +98,7 @@ export function Login() {
             username: state.username,
             password: state.password,
           })
-          naviagte("/welcome")
+          navigate("/welcome")
         }}
       >
         Login

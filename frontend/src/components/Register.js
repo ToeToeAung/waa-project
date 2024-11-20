@@ -1,4 +1,4 @@
-import { AcUnitOutlined, Visibility, VisibilityOff } from "@mui/icons-material"
+import { Visibility, VisibilityOff } from "@mui/icons-material"
 import {
   Button,
   IconButton,
@@ -7,10 +7,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import React, { useReducer, useState } from "react"
+import React, { useReducer } from "react"
+import { useNavigate } from "react-router-dom"
 import { register } from "../api/auth"
 import { useLogin } from "../hook/auth"
-import { useNavigate } from "react-router-dom"
 
 const SET_USERNAME = "set_username"
 const SET_PASSWORD = "set_password"
@@ -40,6 +40,8 @@ export function Register(props) {
           return { ...state, state: action.state }
         case TOGGLE_SHOW_PASSWORD:
           return { ...state, showPassword: !state.showPassword }
+        default:
+          return state
       }
     },
     {

@@ -30,7 +30,7 @@ export function Welcome() {
     return () => {
       clearTimeout(timeId)
     }
-  }, [me])
+  }, [me, navigate])
 
-  return null
+  return <></>
 }

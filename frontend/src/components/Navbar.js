@@ -1,16 +1,15 @@
-import React from "react"
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
 import {
   AppBar,
   Badge,
   Button,
-  Chip,
   IconButton,
   Toolbar,
   Typography,
 } from "@mui/material"
-import { Link, useNavigate } from "react-router-dom"
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart"
+import React from "react"
 import { useSelector } from "react-redux"
+import { Link, useNavigate } from "react-router-dom"
 import {
   USER_ROLE_ADMIN,
   USER_ROLE_BUYER,
@@ -72,6 +71,7 @@ export function Navbar() {
                   {r.name}
                 </Button>
               )
+            return null
           })}
         </div>
         {!me ? (

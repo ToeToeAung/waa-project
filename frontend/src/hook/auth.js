@@ -18,7 +18,7 @@ export function useInitAuthStore() {
         console.error(e)
       }
     })()
-  }, [])
+  }, [dispatch])
 }
 
 export function useLogin() {
