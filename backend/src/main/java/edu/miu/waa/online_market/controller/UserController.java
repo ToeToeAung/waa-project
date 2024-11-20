@@ -43,6 +43,9 @@ public class UserController {
             error.put("error", Collections.singletonMap("username", "duplicate"));
             return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
         }
+        if(user.getRole().equals(Role.ADMIN)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
         Address address = new Address(user.getAddress().getStreet(), user.getAddress().getCity(),
                 user.getAddress().getState(), user.getAddress().getZip());
