@@ -15,6 +15,7 @@ import { OrderHistory } from "./components/OrderHistory"
 import { CreateCategory } from "./components/admin/CreateCategory"
 import { useInitAuthStore } from "./hook/auth"
 import { Welcome } from "./components/Welcome"
+import { USER_ROLE_BUYER, USER_ROLE_SELLER } from "./entity/Auth"
 
 function App() {
   useInitAuthStore()
@@ -32,7 +33,10 @@ function App() {
               <Route path=":id" element={<ProductDetails />} />
             </Route>
             <Route path="/orders" element={<OrderHistory />} />
-            <Route path="/register" element={<Register role="buyer" />} />
+            <Route
+              path="/register"
+              element={<Register role={USER_ROLE_BUYER} />}
+            />
             <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/admin">
@@ -40,7 +44,10 @@ function App() {
               <Route path="categories" element={<CreateCategory />} />
             </Route>
             <Route path="/seller">
-              <Route path="register" element={<Register role="seller" />} />
+              <Route
+                path="register"
+                element={<Register role={USER_ROLE_SELLER} />}
+              />
               <Route path="products">
                 <Route index element={<SellerProducts />} />
                 <Route path=":id" element={<SellerEditProduct />} />

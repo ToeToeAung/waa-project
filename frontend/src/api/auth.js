@@ -25,9 +25,9 @@ export async function register({
   username,
   password,
   role,
-  address: { street, city, state, zip, country },
+  address: { street, city, state, zip },
 }) {
-  return publicAxois.post("/register", {
+  return publicAxois.post("/users/register", {
     username,
     password,
     role,
@@ -36,7 +36,6 @@ export async function register({
       city,
       state,
       zip,
-      country,
     },
   })
 }
