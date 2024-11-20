@@ -51,7 +51,10 @@ public class SecurityConfig{
                 .authorizeHttpRequests(auth -> auth
                        // .requestMatchers("/api/v1/posts/**").permitAll()
                        // .requestMatchers("/api/v1/comments/**").permitAll()
-                      //  .requestMatchers("/api/v1/users/**").permitAll()
+                 //       .requestMatchers("/api/v1/reviews/**").permitAll()
+                        //.requestMatchers("/api/v1/categories/**").permitAll()
+                        //.requestMatchers("/api/v1/products/**").permitAll()
+                       // .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/authenticate/**").permitAll()
                         //      .requestMatchers("/api/v1/products").hasAnyAuthority(roles.toArray(new String[0])) // Use dynamic authorities
                         .anyRequest().authenticated()
