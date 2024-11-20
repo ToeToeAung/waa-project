@@ -1,4 +1,16 @@
-import { Box, Paper, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Typography,
+} from "@mui/material"
 import React, { useState, useEffect } from "react"
 import {
   ORDER_ALL,
@@ -7,6 +19,16 @@ import {
   ORDER_DELIVERED,
   ORDER_CANCLED,
 } from "../entity/OrderStatus"
+import { Cancel, Folder } from "@mui/icons-material"
+import {
+  Timeline,
+  TimelineConnector,
+  TimelineContent,
+  TimelineDot,
+  TimelineItem,
+  TimelineSeparator,
+} from "@mui/lab"
+import { OrderState } from "./OrderState"
 
 const getOrders = () => {
   return Promise.resolve(
@@ -105,7 +127,35 @@ export function OrderHistory() {
 function Order({ order }) {
   return (
     <Paper sx={{ p: 2 }} variant="outlined">
-      <Typography>Invoice No. {order.id}</Typography>
+      <Typography variant="h6">Invoice No. {order.id}</Typography>
+      <List>
+        {order.items.map((oi) => (
+          <OrderItem key={oi.id} item={oi} />
+        ))}
+      </List>
+      <Divider sx={{ mt: 2, mb: 2 }} />
+      <Typography variant="caption">Get Recipt</Typography>
+      <ButtonGroup sx={{ ml: 2 }}>
+        <Button>PDF</Button>
+        <Button>XLS</Button>
+      </ButtonGroup>
     </Paper>
+  )
+}
+
+function OrderItem({ item }) {
+  return (
+    <ListItem
+      secondaryAction={
+        item.state === ORDER_PENDING ? (
+          <IconButton edge="end">
+            <Cancel />
+          </IconButton>
+        ) : null
+      }
+    >
+      <ListItemText primary={item.product.name} />
+      <OrderState state={item.state} />
+    </ListItem>
   )
 }

@@ -1,23 +1,26 @@
 import { CssBaseline } from "@mui/material"
-import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom"
 import { Login } from "./components/Login"
 import { PageLayout } from "./components/PageLayout"
 import { Products } from "./components/Products"
 import { ProductDetails } from "./components/ProductDetails"
 import { Cart } from "./components/Cart"
-import { ApproveSeller } from "./components/ApproveSeller"
+import { ApproveSeller } from "./components/admin/ApproveSeller"
 import { Register } from "./components/Register"
 import { SellerProducts } from "./components/seller/SellerProducts"
 import { SellerEditProduct } from "./components/seller/SellerEditProduct"
 import { SellerAddProduct } from "./components/seller/SellerAddProduct"
 import { SellerOrders } from "./components/seller/SellerOrders"
 import { OrderHistory } from "./components/OrderHistory"
+import { CreateCategory } from "./components/admin/CreateCategory"
+
 function App() {
   return (
     <>
       <BrowserRouter>
         <CssBaseline />
         <Routes>
+          <Route path="*" element={<Navigate to="/login" replace />} />
           <Route element={<PageLayout />}>
             <Route path="/products">
               <Route index element={<Products />} />
@@ -29,6 +32,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/admin">
               <Route path="approve-seller" element={<ApproveSeller />} />
+              <Route path="categories" element={<CreateCategory />} />
             </Route>
             <Route path="/seller">
               <Route path="register" element={<Register role="seller" />} />
