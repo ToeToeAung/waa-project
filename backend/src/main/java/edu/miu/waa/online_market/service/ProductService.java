@@ -14,4 +14,5 @@ public interface ProductService {
     void updateProduct(Long id, int quantity);
     void deleteProduct(Long id);
     List<Review> findReviewsByProduct(Long id);
+    Boolean subQuantity(Long productId, int quantity);
 }
