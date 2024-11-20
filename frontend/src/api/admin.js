@@ -9,3 +9,11 @@ export async function deleteReview({ productId, reviewId }) {
     .delete(`/products/reviews?productId=${productId}&reviewId=${reviewId}`)
     .then((res) => res.data)
 }
+
+export async function getPendingSeller() {
+  return authAxios.get("/users/sellers").then((res) => res.data)
+}
+
+export async function approveSeller({ sellerId }) {
+  return authAxios.put(`/users/sellers/${sellerId}`).then((res) => res.data)
+}
