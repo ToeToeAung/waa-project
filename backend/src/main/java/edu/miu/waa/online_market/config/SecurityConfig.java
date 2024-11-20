@@ -55,6 +55,7 @@ public class SecurityConfig{
                         //.requestMatchers("/api/v1/categories/**").permitAll()
                         //.requestMatchers("/api/v1/products/**").permitAll()
                        // .requestMatchers("/api/v1/users/**").permitAll()
+                        .requestMatchers("/api/v1/users/register").permitAll()
                         .requestMatchers("/api/v1/authenticate/**").permitAll()
                         //      .requestMatchers("/api/v1/products").hasAnyAuthority(roles.toArray(new String[0])) // Use dynamic authorities
                         .anyRequest().authenticated()
