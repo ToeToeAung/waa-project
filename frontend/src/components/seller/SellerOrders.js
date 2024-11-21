@@ -1,7 +1,6 @@
 import { Edit } from "@mui/icons-material"
 import {
   Box,
-  Chip,
   IconButton,
   Menu,
   MenuItem,
@@ -13,10 +12,10 @@ import {
 import React, { useMemo, useState } from "react"
 import {
   ORDER_ALL,
+  ORDER_CANCLED,
+  ORDER_DELIVERED,
   ORDER_PENDING,
   ORDER_SHIPPING,
-  ORDER_DELIVERED,
-  ORDER_CANCLED,
 } from "../../entity/OrderStatus"
 import { OrderState } from "../OrderState"
 

@@ -98,7 +98,7 @@ export function Cart() {
             $
             {cartItems.reduce((sum, cur) => {
               if (checkoutItems.has(cur.id)) {
-                sum += cur.product.price
+                sum += cur.product.price * cur.product.quantity
               }
               return sum
             }, 0)}

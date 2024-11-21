@@ -1,4 +1,13 @@
-import { Paper, Typography, Checkbox, Box } from "@mui/material"
+import { Delete } from "@mui/icons-material"
+import {
+  Paper,
+  Typography,
+  Checkbox,
+  Box,
+  TextField,
+  Divider,
+  IconButton,
+} from "@mui/material"
 import React from "react"
 
 export function CartItem({ cartItem, checked, onChange }) {
@@ -10,8 +19,22 @@ export function CartItem({ cartItem, checked, onChange }) {
         <Box>
           <Typography variant="h6">{p.name}</Typography>
           <Typography variant="body2">${p.price}</Typography>
+          <TextField
+            sx={{ mt: 2, width: 80 }}
+            label="quantity"
+            value={p.quantity}
+            size="small"
+            type="number"
+          />
         </Box>
+        <IconButton sx={{ ml: "auto" }}>
+          <Delete />
+        </IconButton>
       </Box>
+      <Divider sx={{ mt: 2, mb: 2 }} />
+      <Typography sx={{ ml: 4 }} variant="body2">
+        ${p.price * p.quantity}
+      </Typography>
     </Paper>
   )
 }
