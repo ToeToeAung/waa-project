@@ -5,12 +5,11 @@ import edu.miu.waa.online_market.entity.Review;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface ProductService {
-    void createProduct(Product product);
+    void createProduct(ProductDto product);
     List<Product> listProducts();
     Page<Product> findByFilters(
             Long categoryId,
@@ -30,5 +29,6 @@ public interface ProductService {
     List<Review> findReviewsByProduct(Long id);
     Boolean subQuantity(Long productId, int quantity);
     List<Product> getProductsBySellerId(long sellserId);
+    void sellerDeleteProduct(long id);
 }
 

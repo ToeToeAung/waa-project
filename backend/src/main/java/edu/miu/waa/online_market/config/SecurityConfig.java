@@ -60,8 +60,7 @@ public class SecurityConfig{
                         .requestMatchers("/api/v1/authenticate/**").permitAll()
                         .requestMatchers("/api/v1/users/register").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/categories").permitAll()
-//                      .requestMatchers(HttpMethod.GET, "/api/v1/products").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/products/buyer/filter").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/products/filter").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/reviews/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/products/{id}").permitAll()
 

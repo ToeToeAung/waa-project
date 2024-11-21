@@ -2,25 +2,19 @@ package edu.miu.waa.online_market.controller;
 
 import edu.miu.waa.online_market.entity.*;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
-
 import edu.miu.waa.online_market.service.LoggerService;
-import edu.miu.waa.online_market.service.CategoryService;
 import edu.miu.waa.online_market.service.ProductService;
 import edu.miu.waa.online_market.service.ReviewService;
 import edu.miu.waa.online_market.service.UserService;
-import edu.miu.waa.online_market.service.impl.CategoryServiceImpl;
 import edu.miu.waa.online_market.util.CurrentUser;
-import edu.miu.waa.online_market.util.ListMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
 
 import java.util.List;
 
@@ -28,22 +22,14 @@ import java.util.List;
 @RequestMapping("/api/v1/products")
 @CrossOrigin(origins = {"*"})
 //@PreAuthorize("#username == authentication.name")
+@AllArgsConstructor
 public class ProductController {
     private final ProductService productService;
     private final ReviewService reviewService;
     private final UserService userService;
     private final LoggerService loggerService;
-  private final CategoryService categoryService;
-    @Autowired
-    public ProductController(ProductService productService, ReviewService reviewService, UserService userService,LoggerService loggerService, CategoryService categoryService) {
-        this.productService = productService;
-        this.reviewService = reviewService;
-        this.userService = userService;
-        this.loggerService = loggerService;
-       this.categoryService = categoryService;
-    }
 
-    @GetMapping("/buyer/filter")
+    @GetMapping("/filter")
     public ResponseEntity<Page<Product>> filterProducts(
             @RequestParam(required = false, defaultValue = "0") Long categoryId,
             @RequestParam(required = false, defaultValue = "0") Float ratingGt,
@@ -53,16 +39,20 @@ public class ProductController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int pageSize) {
 
-        User user = userService.findByUsername(CurrentUser.getCurrentUser());
-        loggerService.logOperation("Buyer filter "+user.getUsername() +"User Role "+ user.getRole() + " Role.BUYER? "+Role.BUYER);
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<Product> products;
-        if(user.getRole().equals(Role.BUYER)){
-           products = productService.findByFilters(categoryId, ratingGt, ratingLt, priceGt, priceLt, pageable);
-            return ResponseEntity.ok(products);
-        }else{
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
+        products = productService.findByFilters(categoryId, ratingGt, ratingLt, priceGt, priceLt, pageable);
+        return ResponseEntity.ok(products);
+//        User user = userService.findByUsername(CurrentUser.getCurrentUser());
+//        loggerService.logOperation("Buyer filter "+user.getUsername() +"User Role "+ user.getRole() + " Role.BUYER? "+Role.BUYER);
+//        Pageable pageable = PageRequest.of(page, pageSize);
+//        Page<Product> products;
+//        if(user.getRole().equals(Role.BUYER)){
+//        products = productService.findByFilters(categoryId, ratingGt, ratingLt, priceGt, priceLt, pageable);
+//        return ResponseEntity.ok(products);
+//        }else{
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+//        }
     }
 
     @GetMapping("/seller")
@@ -81,17 +71,21 @@ public class ProductController {
     public Product getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
     }
-    @PostMapping
 
-    public void createProduct(@RequestBody Product product) {
+    @PostMapping
+    public void createProduct(@RequestBody ProductDto product) {
         User user = userService.findByUsername(CurrentUser.getCurrentUser());
         loggerService.logOperation("User Role "+ user.getRole() + " Role.SELLER "+Role.SELLER);
+
+        // TODO: move logic to service layer
         if(user.getRole().equals(Role.SELLER) && user.getSellerStatus().equals(SellerStatus.APPROVED)){
 //         if(null == categoryService.findById(categoryId)){
 //                  throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
 //              }
         productService.createProduct(product);
+        return;
       }
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN);
       }
       
     
@@ -108,13 +102,14 @@ public class ProductController {
 
     @DeleteMapping("{id}")
     public void deleteProduct(@PathVariable Long id) {
-        String username = CurrentUser.getCurrentUser();
-        Product product = productService.getProduct(id);
-        if(product != null && product.getUser().getUsername().equals(username)){
-            productService.deleteProduct(id);
-        }else{
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Product");
-        }
+        productService.sellerDeleteProduct(id);
+//        String username = CurrentUser.getCurrentUser();
+//        Product product = productService.getProduct(id);
+//        if(product != null && product.getUser().getUsername().equals(username)){
+//            productService.deleteProduct(id);
+//        }else{
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Product");
+//        }
     }
 
     @PostMapping("{id}/reviews")
