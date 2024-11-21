@@ -3,48 +3,43 @@ package edu.miu.waa.online_market.service.impl;
 import edu.miu.waa.online_market.entity.*;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
 import edu.miu.waa.online_market.entity.dto.UserDto;
-import edu.miu.waa.online_market.repo.CategoryRepo;
+import edu.miu.waa.online_market.repo.OrderItemRepo;
 import edu.miu.waa.online_market.repo.ProductRepo;
 import edu.miu.waa.online_market.service.CategoryService;
-import edu.miu.waa.online_market.service.LoggerService;
 import edu.miu.waa.online_market.service.ProductService;
 import edu.miu.waa.online_market.service.UserService;
 import edu.miu.waa.online_market.util.CurrentUser;
 import edu.miu.waa.online_market.util.ListMapper;
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class ProductServiceImpl implements ProductService {
     final private ProductRepo productRepo;
     final private CategoryService categoryService;
     final private UserService userService;
     final private ListMapper listMapper;
     final private ModelMapper modelMapper;
+    final private OrderItemRepo orderItemRepo;
 
-    @Autowired
-    public ProductServiceImpl(ProductRepo productRepo, CategoryService categoryService, UserService userService,
-                              ListMapper listMapper, ModelMapper modelMapper) {
-        this.productRepo = productRepo;
-        this.categoryService = categoryService;
-        this.userService = userService;
-        this.listMapper = listMapper;
-        this.modelMapper = modelMapper;
-
-    }
 
     @Override
-    public void createProduct(Product product){
+    public void createProduct(ProductDto p){
+        Product product = modelMapper.map(p, Product.class);
         User user = userService.findByUsername(CurrentUser.getCurrentUser());
+        Category  category = categoryService.findById(p.getCategoryId());
         product.setUser(user);
+        product.setCategory(category);
         productRepo.save(product);
     }
 
@@ -121,5 +116,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getProductsBySellerId(long sellerId){
         return productRepo.findProductsBySellerId(sellerId);
+    }
+
+    @Override
+    public void sellerDeleteProduct(long id) {
+        User user = userService.findByUsername(CurrentUser.getCurrentUser());
+        if (user == null || !user.getRole().equals(Role.SELLER)) {
+            // TODO: make custom exception
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        if (orderItemRepo.countByProductId(id) > 0) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        productRepo.deleteById(id);
     }
 }
