@@ -16,28 +16,12 @@ import java.util.List;
 public interface ProductRepo extends JpaRepository<Product, Long> {
     Product save(Product product);
     List<Product> findAll();
-//    @Query("SELECT p FROM Product p join  p.reviews r WHERE " +
-//            "(:categoryId IS NULL  OR p.category.id = :categoryId) AND " +
-//            "(:ratingGt IS NULL OR r.rating > :ratingGt) AND " +
-//            "(:ratingLt IS NULL OR r.rating < :ratingLt) AND " +
-//            "(:priceGt IS NULL OR p.price > :priceGt) AND " +
-//            "(:priceLt IS NULL OR p.price < :priceLt)")
-//    Page<Product> findByFilters(
-//            @Param("categoryId") Long categoryId,
-//            @Param("ratingGt") Float ratingGt,
-//            @Param("ratingLt") Float ratingLt,
-//            @Param("priceGt") Float priceGt,
-//            @Param("priceLt") Float priceLt,
-//            Pageable pageable);
-
-
-    @Query("SELECT p FROM Product p " +
-            "WHERE " +
-            "(:categoryId = 0 OR p.category.id = :categoryId) AND " +
-            "(:ratingGt = 0 OR p.overAllRating > :ratingGt) AND " +
-            "(:ratingLt = 0 OR p.overAllRating < :ratingLt) AND " +
-            "(:priceGt = 0 OR p.price > :priceGt) AND " +
-            "(:priceLt = 0 OR p.price < :priceLt)")
+    @Query("SELECT p FROM Product p WHERE "
+            + "(:categoryId IS NULL OR p.category.id = :categoryId) AND "
+            + "(:ratingGt IS NULL OR p.overAllRating >= :ratingGt) AND "
+            + "(:ratingLt IS NULL OR p.overAllRating <= :ratingLt) AND "
+            + "(:priceGt IS NULL OR p.price >= :priceGt) AND "
+            + "(:priceLt IS NULL OR p.price <= :priceLt)")
     Page<Product> findByFilters(
             @Param("categoryId") Long categoryId,
             @Param("ratingGt") Float ratingGt,
@@ -45,7 +29,6 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
             @Param("priceGt") Float priceGt,
             @Param("priceLt") Float priceLt,
             Pageable pageable);
-
 
     void deleteById(Long id);
     @Query("Select r From Product p Join p.reviews r Where p.id = :id")
