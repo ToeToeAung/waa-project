@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> findSellersWithPendingStatus(){
-        return (List<UserDto>) listMapper.mapList(userRepo.findBySellerStatus(SellerStatus.PENDING), new UserDto());
+        return (List<UserDto>) listMapper.mapList(userRepo.findBySellerStatusAndRole(SellerStatus.PENDING, Role.SELLER), new UserDto());
     }
 
     @Override

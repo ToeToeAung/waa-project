@@ -5,7 +5,15 @@ export function Product({ product }) {
   return (
     <Card variant="outlined" sx={{ width: 200 }}>
       <CardContent>
-        <Typography component="h2" variant="h5">
+        <Typography
+          component="h2"
+          variant="h5"
+          sx={{
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          }}
+        >
           {product.name}
         </Typography>
         <Typography

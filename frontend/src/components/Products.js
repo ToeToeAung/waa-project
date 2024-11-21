@@ -17,37 +17,14 @@ import { Product } from "./Product"
 import { getCategories } from "../api/public"
 import { getProducts } from "../api/public"
 
-// const getProducts = ({ page, pageSize }) => {
-//   return Promise.resolve({
-//     products: Array(pageSize)
-//       .fill(null)
-//       .map((_, idx) => ({
-//         id: idx + 1,
-//         name: `product-${idx + 1}`,
-//         description:
-//           "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-//         quantity: 10,
-//         price: 20,
-//         sellerId: 1,
-//         categoryId: 3,
-//         rating: 2.5,
-//       })),
-//     totalPage: 10,
-//   })
-// }
-
 const PAGE_SIZE = 8
 
 export function Products() {
   const [productData, setProductData] = useState(null)
   const [page, setPage] = useState(1)
   useEffect(() => {
-    getProducts({ page, pageSize: PAGE_SIZE }).then(
-      (res) => setProductData(res),
-      // setProductData({
-      //   products: res.map((r) => ({ ...r, rating: 2.5, name: "product name" })),
-      //   totalPage: 10,
-      // }),
+    getProducts({ page, pageSize: PAGE_SIZE }).then((res) =>
+      setProductData(res),
     )
   }, [])
 

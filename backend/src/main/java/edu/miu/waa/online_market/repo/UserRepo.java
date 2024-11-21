@@ -1,4 +1,5 @@
 package edu.miu.waa.online_market.repo;
+import edu.miu.waa.online_market.entity.Role;
 import edu.miu.waa.online_market.entity.SellerStatus;
 import edu.miu.waa.online_market.entity.User;
 import edu.miu.waa.online_market.entity.dto.UserDto;
@@ -21,4 +22,5 @@ public interface UserRepo extends JpaRepository<User,Long>  {
     public List<User> findAll();
     public User findByUsername(String username);
     List<User> findBySellerStatus(SellerStatus sellerStatus);
+    List<User> findBySellerStatusAndRole(SellerStatus sellerStatus, Role role);
 }
