@@ -66,6 +66,12 @@ public class OrderServiceImpl implements OrderService{
     public Order findById(long id) {
         return orderRepo.findById(id);
     }
+
+    @Override
+    public OrderItem findByOrderItemId(long orderItemId) {
+        return orderRepo.getOrderItemById(orderItemId);
+    }
+
     @Override
     public void deleteById(long id) {
         orderRepo.deleteById(id);
@@ -75,15 +81,16 @@ public class OrderServiceImpl implements OrderService{
         orderRepo.deleteOrderByItemId(productId,orderId);
     }
 
-//    @Override
-//    public int updateOrderStatus(long orderId, OrderStatus status) {
-//        return orderRepo.updateOrderStatus(orderId,status);
-//    }
-//
-//    @Override
-//    public int updateOrderItemStatus(long orderItemId, OrderStatus status) {
-//        return orderRepo.updateOrderItemStatus(orderItemId,status);
-//    }
+    @Override
+    @Transactional
+    public int updateOrderStatus(long orderId, OrderStatus status) {
+        return orderRepo.updateOrderStatus(orderId,status);
+    }
 
+    @Override
+    @Transactional
+    public int updateOrderItemStatus(long orderItemId, OrderStatus status) {
+        return orderRepo.updateOrderItemStatus(orderItemId,status);
+    }
 
 }
