@@ -12,6 +12,8 @@ import {
 import React, { useEffect, useReducer, useState } from "react"
 import { getCategories } from "../../api/public"
 import { createProduct } from "../../api/seller"
+import { useAlert } from "../../hook/alert"
+import { ERR_UNKNOWN } from "../../entity/error"
 
 const SET_CATEGORY_ID = "set_category_id"
 const SET_DESCRIPTION = "set_description"
@@ -29,6 +31,7 @@ const emptyForm = {
 }
 
 export function SellerAddProduct() {
+  const alert = useAlert()
   const [categories, setCategories] = useState([])
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
@@ -119,13 +122,19 @@ export function SellerAddProduct() {
       <Button
         variant="contained"
         onClick={async () => {
-          await createProduct({
-            categoryId: state.categoryId,
-            description: state.description,
-            quantity: state.quantity,
-            price: state.price,
-          })
-          dispatch({ type: CLEAR_FORM })
+          try {
+            await createProduct({
+              categoryId: state.categoryId,
+              name: state.name,
+              description: state.description,
+              quantity: state.quantity,
+              price: state.price,
+            })
+            dispatch({ type: CLEAR_FORM })
+            alert({ msg: "product created", level: "success" })
+          } catch (e) {
+            alert({ msg: ERR_UNKNOWN, level: "error" })
+          }
         }}
       >
         Add
