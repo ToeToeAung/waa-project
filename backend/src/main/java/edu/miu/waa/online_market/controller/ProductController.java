@@ -86,10 +86,10 @@ public class ProductController {
     public void createProduct(@RequestBody Product product) {
         User user = userService.findByUsername(CurrentUser.getCurrentUser());
         loggerService.logOperation("User Role "+ user.getRole() + " Role.SELLER "+Role.SELLER);
-       if(user.getRole().equals(Role.SELLER) && user.getSellerStatus().equals(SellerStatus.APPROVED)){
-         if(null == categoryService.findById(categoryId)){
-                  throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
-              }
+        if(user.getRole().equals(Role.SELLER) && user.getSellerStatus().equals(SellerStatus.APPROVED)){
+//         if(null == categoryService.findById(categoryId)){
+//                  throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+//              }
         productService.createProduct(product);
       }
       }
