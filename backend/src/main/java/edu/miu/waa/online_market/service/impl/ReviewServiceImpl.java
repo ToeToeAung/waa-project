@@ -25,6 +25,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void create(Review review, Long productId) {
         Product product = productService.getProduct(productId);
+        product.setRatingSum(product.getRatingSum() + review.getRating());
+        product.setTotalUser(product.getTotalUser()+1);
+        product.setOverAllRating(product.getRatingSum()/product.getTotalUser());
         product.getReviews().add(review);
         reviewRepo.save(review);
     }

@@ -13,7 +13,7 @@ import java.util.List;
 public interface OrderService {
    // Order saveOrder(Order order);
     @Transactional
-    Order saveOrder(long cartItemId);
+    Order saveOrder(List<Long> cartItems);
     List<Order> getOrderItemsBySellerId(long sellerId, long orderId);
     List<Order> findAll();
     Order findById(long id);

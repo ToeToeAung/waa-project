@@ -8,4 +8,6 @@ public class ProductDto {
     private String description;
     private int quantity;
     private float price;
+    private Long categoryId;
+    private Long sellerId;
 }

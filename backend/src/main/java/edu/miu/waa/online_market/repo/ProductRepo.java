@@ -1,7 +1,10 @@
 package edu.miu.waa.online_market.repo;
 
+import edu.miu.waa.online_market.entity.CartItem;
 import edu.miu.waa.online_market.entity.Product;
 import edu.miu.waa.online_market.entity.Review;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,8 +16,43 @@ import java.util.List;
 public interface ProductRepo extends JpaRepository<Product, Long> {
     Product save(Product product);
     List<Product> findAll();
-    //Product findById(Long id);
+//    @Query("SELECT p FROM Product p join  p.reviews r WHERE " +
+//            "(:categoryId IS NULL  OR p.category.id = :categoryId) AND " +
+//            "(:ratingGt IS NULL OR r.rating > :ratingGt) AND " +
+//            "(:ratingLt IS NULL OR r.rating < :ratingLt) AND " +
+//            "(:priceGt IS NULL OR p.price > :priceGt) AND " +
+//            "(:priceLt IS NULL OR p.price < :priceLt)")
+//    Page<Product> findByFilters(
+//            @Param("categoryId") Long categoryId,
+//            @Param("ratingGt") Float ratingGt,
+//            @Param("ratingLt") Float ratingLt,
+//            @Param("priceGt") Float priceGt,
+//            @Param("priceLt") Float priceLt,
+//            Pageable pageable);
+
+
+    @Query("SELECT p FROM Product p " +
+            "WHERE " +
+            "(:categoryId = 0 OR p.category.id = :categoryId) AND " +
+            "(:ratingGt = 0 OR p.overAllRating > :ratingGt) AND " +
+            "(:ratingLt = 0 OR p.overAllRating < :ratingLt) AND " +
+            "(:priceGt = 0 OR p.price > :priceGt) AND " +
+            "(:priceLt = 0 OR p.price < :priceLt)")
+    Page<Product> findByFilters(
+            @Param("categoryId") Long categoryId,
+            @Param("ratingGt") Float ratingGt,
+            @Param("ratingLt") Float ratingLt,
+            @Param("priceGt") Float priceGt,
+            @Param("priceLt") Float priceLt,
+            Pageable pageable);
+
+
     void deleteById(Long id);
     @Query("Select r From Product p Join p.reviews r Where p.id = :id")
     List<Review> findReviewsByProductId(Long id);
+
+    @Query("Select p From Product p Where p.user.id = :sellerId")
+    List<Product> findProductsBySellerId(@Param("sellerId") long sellerId);
+
+
 }

@@ -41,8 +41,9 @@ public class JwtUtil extends OncePerRequestFilter{
   //  private final String secret = Base64.getEncoder().encodeToString("top-secret".getBytes(StandardCharsets.UTF_8));
    // private final String secret = "top-secret";
     private final String secret ="S3vR8aQ9qZ3tZaVQsYX0hc5I0Wds6K8xlBv7sZB/TJz9NCY+qNXnAz8sOm1DQ/TWjbs2UpfMi3BW9yTbJGv9gA==";
-    private final long expiration = 5 * 60 * 60 * 60;
-    private final long refreshExpiration = 5 * 60 * 60 * 60 * 60;
+    private final long expiration = 60 * 60 * 1000;//1 hour
+    //private final long refreshExpiration = 5 * 60 * 60 * 60 * 60;
+    private final long refreshExpiration = 60 * 60 * 1000; // 1 hour in milliseconds
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
@@ -86,7 +87,7 @@ public class JwtUtil extends OncePerRequestFilter{
                 .compact();
     }
 
-    public String doGenerateToken(String subject) {
+    public String doGenerateRefreshToken(String subject) {
         return Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(new Date())
@@ -95,14 +96,14 @@ public class JwtUtil extends OncePerRequestFilter{
                 .compact();
     }
 
-    public String generateRefreshToken(String email) {
-        return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
-    }
+//    public String generateRefreshToken(String email) {
+//        return Jwts.builder()
+//                .setSubject(email)
+//                .setIssuedAt(new Date())
+//                .setExpiration(new Date(System.currentTimeMillis() + refreshExpiration))
+//                .signWith(SignatureAlgorithm.HS512, secret)
+//                .compact();
+//    }
 
     public String getSubject(String token) {
         return Jwts.parser()
@@ -182,6 +183,7 @@ public class JwtUtil extends OncePerRequestFilter{
         if (jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             final Claims claims = getAllClaimsFromToken(jwt);
             UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
+
             if (validateToken(jwt)) {
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
