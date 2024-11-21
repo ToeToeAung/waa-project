@@ -1,14 +1,14 @@
 package edu.miu.waa.online_market.controller;
 
-import edu.miu.waa.online_market.entity.Product;
-import edu.miu.waa.online_market.entity.Review;
-import edu.miu.waa.online_market.entity.Role;
-import edu.miu.waa.online_market.entity.User;
+import edu.miu.waa.online_market.entity.*;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
+
 import edu.miu.waa.online_market.service.LoggerService;
+import edu.miu.waa.online_market.service.CategoryService;
 import edu.miu.waa.online_market.service.ProductService;
 import edu.miu.waa.online_market.service.ReviewService;
 import edu.miu.waa.online_market.service.UserService;
+import edu.miu.waa.online_market.service.impl.CategoryServiceImpl;
 import edu.miu.waa.online_market.util.CurrentUser;
 import edu.miu.waa.online_market.util.ListMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +33,14 @@ public class ProductController {
     private final ReviewService reviewService;
     private final UserService userService;
     private final LoggerService loggerService;
+  private final CategoryService categoryService;
     @Autowired
-    public ProductController(ProductService productService, ReviewService reviewService, UserService userService,LoggerService loggerService) {
+    public ProductController(ProductService productService, ReviewService reviewService, UserService userService,LoggerService loggerService, CategoryService categoryService) {
         this.productService = productService;
         this.reviewService = reviewService;
         this.userService = userService;
         this.loggerService = loggerService;
+       this.categoryService = categoryService;
     }
 
     @GetMapping("/buyer/filter")
@@ -80,20 +82,39 @@ public class ProductController {
         return productService.getProduct(id);
     }
     @PostMapping
+
     public void createProduct(@RequestBody Product product) {
         User user = userService.findByUsername(CurrentUser.getCurrentUser());
         loggerService.logOperation("User Role "+ user.getRole() + " Role.SELLER "+Role.SELLER);
+       if(user.getRole().equals(Role.SELLER) && user.getSellerStatus().equals(SellerStatus.APPROVED)){
+         if(null == categoryService.findById(categoryId)){
+                  throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
+              }
         productService.createProduct(product);
-    }
-
+      }
+      }
+      
+    
     @PutMapping()
     public void updateProduct(@RequestParam Long id, @RequestParam int quantity) {
-        productService.updateProduct(id, quantity);
+        String username = CurrentUser.getCurrentUser();
+        Product product = productService.getProduct(id);
+        if(product != null && product.getUser().getUsername().equals(username)){
+            productService.updateProduct(id, quantity);
+        }else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Product");
+        }
     }
 
     @DeleteMapping("{id}")
     public void deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
+        String username = CurrentUser.getCurrentUser();
+        Product product = productService.getProduct(id);
+        if(product != null && product.getUser().getUsername().equals(username)){
+            productService.deleteProduct(id);
+        }else{
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Product");
+        }
     }
 
     @PostMapping("{id}/reviews")

@@ -6,20 +6,37 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import React from "react"
-
-const categories = [
-  { id: 1, name: "toy" },
-  { id: 2, name: "book" },
-  { id: 3, name: "clothes" },
-]
+import React, { useEffect, useState } from "react"
+import { getCategories } from "../../api/public"
+import { createCategory } from "../../api/admin"
 
 export function CreateCategory() {
+  const [categories, setCategories] = useState([])
+  const [newCategoryName, setNewCategoryName] = useState("")
+
+  useEffect(() => {
+    getCategories().then((res) => setCategories(res))
+  }, [])
+
   return (
     <Box>
       <Typography variant="h6">Categories</Typography>
-      <TextField label="category name" size="small" />
-      <Button sx={{ ml: 2 }} variant="contained">
+      <TextField
+        label="category name"
+        size="small"
+        value={newCategoryName}
+        onChange={(e) => setNewCategoryName(e.target.value)}
+      />
+      <Button
+        sx={{ ml: 2 }}
+        variant="contained"
+        onClick={async () => {
+          await createCategory({ name: newCategoryName })
+          const categories = await getCategories()
+          setCategories(categories)
+          setNewCategoryName("")
+        }}
+      >
         Add
       </Button>
       <List>
