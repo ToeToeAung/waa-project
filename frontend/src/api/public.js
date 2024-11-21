@@ -5,7 +5,7 @@ export async function getCategories() {
 }
 
 export async function getProducts() {
-  return publicAxois.get("/products").then((res) => res.data)
+  return publicAxois.get("/products/filter").then((res) => res.data)
 }
 
 export async function getProductById(id) {

@@ -15,26 +15,26 @@ import React, { useEffect, useReducer, useState } from "react"
 import { Link } from "react-router-dom"
 import { Product } from "./Product"
 import { getCategories } from "../api/public"
-// import { getProducts } from "../api/public"
+import { getProducts } from "../api/public"
 
-const getProducts = ({ page, pageSize }) => {
-  return Promise.resolve({
-    products: Array(pageSize)
-      .fill(null)
-      .map((_, idx) => ({
-        id: idx + 1,
-        name: `product-${idx + 1}`,
-        description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-        quantity: 10,
-        price: 20,
-        sellerId: 1,
-        categoryId: 3,
-        rating: 2.5,
-      })),
-    totalPage: 10,
-  })
-}
+// const getProducts = ({ page, pageSize }) => {
+//   return Promise.resolve({
+//     products: Array(pageSize)
+//       .fill(null)
+//       .map((_, idx) => ({
+//         id: idx + 1,
+//         name: `product-${idx + 1}`,
+//         description:
+//           "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+//         quantity: 10,
+//         price: 20,
+//         sellerId: 1,
+//         categoryId: 3,
+//         rating: 2.5,
+//       })),
+//     totalPage: 10,
+//   })
+// }
 
 const PAGE_SIZE = 8
 
@@ -61,9 +61,9 @@ export function Products() {
       {!productData ? (
         "loading"
       ) : (
-        <Box>
+        <Box sx={{ flexGrow: 1 }}>
           <Grid2 container spacing={2}>
-            {productData.products.map((p) => (
+            {productData.content.map((p) => (
               <Grid2 size={3}>
                 <Link
                   key={p.id}

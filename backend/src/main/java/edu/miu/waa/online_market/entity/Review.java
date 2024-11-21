@@ -18,8 +18,8 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     @JsonBackReference
-
     private Product product;
+
     public Review(String content, float rating) {
         this.content = content;
         this.rating = rating;
