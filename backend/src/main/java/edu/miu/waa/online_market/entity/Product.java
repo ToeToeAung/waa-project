@@ -36,7 +36,8 @@ public class Product {
     private List<Review> reviews;
 
 
-    public Product(String description, int quantity, float price, Category category, User user) {
+    public Product(String name,String description, int quantity, float price, Category category, User user) {
+        this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.price = price;

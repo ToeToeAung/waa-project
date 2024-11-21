@@ -6,7 +6,7 @@ import edu.miu.waa.online_market.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -24,7 +24,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
     @Override
     public List<Category> findAll() {
-        return categoryRepo.findAll();
+        return categoryRepo.findAll().stream()
+                .sorted(Comparator.comparing(Category::getName))
+                .toList();
     }
     @Override
     public Category findById(Long id){

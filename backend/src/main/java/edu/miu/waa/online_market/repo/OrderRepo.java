@@ -15,7 +15,6 @@ public interface OrderRepo  extends JpaRepository<Order, Long> {
     List<Order> findAll();
     Order findById(long id);
     void deleteById(long id);
-
     @Modifying
     @Query("DELETE FROM OrderItem o WHERE o.product.id = :productId AND o.order.id = :orderId")
     void deleteOrderByItemId(@Param("productId") long productId, @Param("orderId") long orderId);
@@ -35,6 +34,4 @@ public interface OrderRepo  extends JpaRepository<Order, Long> {
     @Modifying
     @Query("UPDATE OrderItem o SET o.orderStatus = :status WHERE o.id = :orderItemId")
     int updateOrderItemStatus(@Param("orderItemId") long orderItemId, @Param("status") OrderStatus status);
-
-
 }

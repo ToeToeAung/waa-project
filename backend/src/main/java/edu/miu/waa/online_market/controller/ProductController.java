@@ -2,10 +2,7 @@ package edu.miu.waa.online_market.controller;
 
 import edu.miu.waa.online_market.entity.*;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
-import edu.miu.waa.online_market.service.LoggerService;
-import edu.miu.waa.online_market.service.ProductService;
-import edu.miu.waa.online_market.service.ReviewService;
-import edu.miu.waa.online_market.service.UserService;
+import edu.miu.waa.online_market.service.*;
 import edu.miu.waa.online_market.util.CurrentUser;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -21,45 +19,44 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/products")
 @CrossOrigin(origins = {"*"})
-//@PreAuthorize("#username == authentication.name")
-@AllArgsConstructor
+@PreAuthorize("#username == authentication.name")
+//@AllArgsConstructor
 public class ProductController {
     private final ProductService productService;
     private final ReviewService reviewService;
     private final UserService userService;
     private final LoggerService loggerService;
+    private final CategoryService categoryService;
+
+    public ProductController(ProductService productService,ReviewService reviewService,UserService userService,LoggerService loggerService,CategoryService categoryService) {
+        this.productService = productService;
+        this.userService = userService;
+        this.reviewService = reviewService;
+        this.loggerService  =loggerService;
+        this.categoryService = categoryService;
+    }
 
     @GetMapping("/filter")
     public ResponseEntity<Page<Product>> filterProducts(
-            @RequestParam(required = false, defaultValue = "0") Long categoryId,
-            @RequestParam(required = false, defaultValue = "0") Float ratingGt,
-            @RequestParam(required = false, defaultValue = "0") Float ratingLt,
-            @RequestParam(required = false, defaultValue = "0") Float priceGt,
-            @RequestParam(required = false, defaultValue = "0") Float priceLt,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Float ratingGt,
+            @RequestParam(required = false) Float ratingLt,
+            @RequestParam(required = false) Float priceGt,
+            @RequestParam(required = false) Float priceLt,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<Product> products;
-        products = productService.findByFilters(categoryId, ratingGt, ratingLt, priceGt, priceLt, pageable);
+        Page<Product> products = productService.findByFilters(categoryId, ratingGt, ratingLt, priceGt, priceLt, pageable);
+
         return ResponseEntity.ok(products);
-//        User user = userService.findByUsername(CurrentUser.getCurrentUser());
-//        loggerService.logOperation("Buyer filter "+user.getUsername() +"User Role "+ user.getRole() + " Role.BUYER? "+Role.BUYER);
-//        Pageable pageable = PageRequest.of(page, pageSize);
-//        Page<Product> products;
-//        if(user.getRole().equals(Role.BUYER)){
-//        products = productService.findByFilters(categoryId, ratingGt, ratingLt, priceGt, priceLt, pageable);
-//        return ResponseEntity.ok(products);
-//        }else{
-//            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-//        }
     }
 
     @GetMapping("/seller")
     public List<Product> getProductsBySeller() {
         User user = userService.findByUsername(CurrentUser.getCurrentUser());
-        System.out.println("User Role "+ user.getRole() + " Role.BUYER "+Role.SELLER);
-        loggerService.logOperation("User Role "+ user.getRole() + " Role.SELLER "+Role.SELLER);
+       // System.out.println("User Role "+ user.getRole() + " Role.BUYER "+Role.SELLER);
+       // loggerService.logOperation("User Role "+ user.getRole() + " Role.SELLER "+Role.SELLER);
         if(user.getRole().equals(Role.SELLER)){
             return productService.getProductsBySellerId(user.getId());
         }else{
@@ -74,20 +71,20 @@ public class ProductController {
 
     @PostMapping
     public void createProduct(@RequestBody ProductDto product) {
+
         User user = userService.findByUsername(CurrentUser.getCurrentUser());
-        loggerService.logOperation("User Role "+ user.getRole() + " Role.SELLER "+Role.SELLER);
+       // loggerService.logOperation("User Role "+ user.getRole() + " Role.SELLER "+Role.SELLER);
 
         // TODO: move logic to service layer
         if(user.getRole().equals(Role.SELLER) && user.getSellerStatus().equals(SellerStatus.APPROVED)){
 //         if(null == categoryService.findById(categoryId)){
 //                  throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found");
 //              }
-        productService.createProduct(product);
-        return;
-      }
+            productService.createProduct(product);
+            return;
+        }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
       }
-      
     
     @PutMapping()
     public void updateProduct(@RequestParam Long id, @RequestParam int quantity) {

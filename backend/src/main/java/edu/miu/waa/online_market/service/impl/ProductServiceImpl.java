@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -53,7 +54,7 @@ public class ProductServiceImpl implements ProductService {
             Pageable pageable
             )
         {
-        return productRepo.findByFilters( categoryId,
+        return productRepo.findByFilters(categoryId,
                  ratingGt,
                  ratingLt,
                  priceGt,
