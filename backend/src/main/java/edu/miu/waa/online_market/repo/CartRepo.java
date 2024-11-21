@@ -22,4 +22,9 @@ public interface CartRepo extends JpaRepository<Cart, Long> {
     @Modifying
     @Query("DELETE FROM CartItem d WHERE d.cart.user.id = :buyerId AND d.product.id = :productId")
     void deleteCartItemByBuyerIdAndProductId(@Param("buyerId") long buyerId, @Param("productId") long productId);
+
+    @Modifying
+    @Query("DELETE FROM CartItem d WHERE d.id = :cartItemId")
+    void deleteCartItemById(@Param("cartItemId") long cartItemId);
+
 }
