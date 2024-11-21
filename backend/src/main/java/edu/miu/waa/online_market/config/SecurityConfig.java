@@ -53,7 +53,7 @@ public class SecurityConfig{
                        // .requestMatchers("/api/v1/comments/**").permitAll()
                  //       .requestMatchers("/api/v1/reviews/**").permitAll()
                         //.requestMatchers("/api/v1/categories/**").permitAll()
-                        //.requestMatchers("/api/v1/products/**").permitAll()
+                        .requestMatchers("/api/v1/products/**").permitAll()
                        // .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/v1/users/register").permitAll()
                         .requestMatchers("/api/v1/authenticate/**").permitAll()

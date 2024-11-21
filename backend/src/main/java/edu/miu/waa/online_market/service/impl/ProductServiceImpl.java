@@ -1,18 +1,20 @@
 package edu.miu.waa.online_market.service.impl;
 
-import edu.miu.waa.online_market.entity.Category;
-import edu.miu.waa.online_market.entity.Product;
-import edu.miu.waa.online_market.entity.Review;
-import edu.miu.waa.online_market.entity.User;
+import edu.miu.waa.online_market.entity.*;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
 import edu.miu.waa.online_market.repo.CategoryRepo;
 import edu.miu.waa.online_market.repo.ProductRepo;
 import edu.miu.waa.online_market.service.CategoryService;
+import edu.miu.waa.online_market.service.LoggerService;
 import edu.miu.waa.online_market.service.ProductService;
 import edu.miu.waa.online_market.service.UserService;
+import edu.miu.waa.online_market.util.CurrentUser;
 import edu.miu.waa.online_market.util.ListMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class ProductServiceImpl implements ProductService {
     final private UserService userService;
     final private ListMapper listMapper;
     final private ModelMapper modelMapper;
+
     @Autowired
     public ProductServiceImpl(ProductRepo productRepo, CategoryService categoryService, UserService userService,
                               ListMapper listMapper, ModelMapper modelMapper) {
@@ -34,20 +37,37 @@ public class ProductServiceImpl implements ProductService {
         this.userService = userService;
         this.listMapper = listMapper;
         this.modelMapper = modelMapper;
-    }
-    @Override
-    public void createProduct(ProductDto productdto, Long categoryId, Long userId){
-        Category category = categoryService.findById(categoryId);
 
-        User user = userService.findById(userId);
-        Product newProduct = new Product(productdto.getDescription(), productdto.getQuantity(), productdto.getPrice(),
-                category, user);
-        productRepo.save(newProduct);
     }
 
     @Override
-    public List<ProductDto> listProducts(){
-        return (List<ProductDto>) listMapper.mapList(productRepo.findAll(), new ProductDto());
+    public void createProduct(Product product){
+        User user = userService.findByUsername(CurrentUser.getCurrentUser());
+        product.setUser(user);
+        productRepo.save(product);
+    }
+
+    @Override
+    public Page<Product> findByFilters(
+            Long categoryId,
+            Float ratingGt,
+            Float ratingLt,
+            Float priceGt,
+            Float priceLt,
+            Pageable pageable
+            )
+        {
+        return productRepo.findByFilters( categoryId,
+                 ratingGt,
+                 ratingLt,
+                 priceGt,
+                 priceLt,
+                pageable);
+    }
+
+    @Override
+    public List<Product> listProducts(){
+        return (List<Product>) listMapper.mapList(productRepo.findAll(), new Product());
     }
 
     @Override
@@ -87,5 +107,10 @@ public class ProductServiceImpl implements ProductService {
         }
         productRepo.save(product);
         return true;
+    }
+
+    @Override
+    public List<Product> getProductsBySellerId(long sellerId){
+        return productRepo.findProductsBySellerId(sellerId);
     }
 }

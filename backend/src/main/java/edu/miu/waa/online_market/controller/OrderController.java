@@ -1,8 +1,5 @@
 package edu.miu.waa.online_market.controller;
-import edu.miu.waa.online_market.entity.Order;
-import edu.miu.waa.online_market.entity.OrderItem;
-import edu.miu.waa.online_market.entity.OrderStatus;
-import edu.miu.waa.online_market.entity.User;
+import edu.miu.waa.online_market.entity.*;
 import edu.miu.waa.online_market.entity.dto.OrderDto;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
 import edu.miu.waa.online_market.repo.UserRepo;
@@ -31,9 +28,9 @@ public class OrderController {
         this.loggerService = loggerService;
     }
 
-    @PostMapping("/cart/{id}")
-    public ResponseEntity<Order> saveOrder(@PathVariable Long id) {
-        Order savedOrder = orderService.saveOrder(id);
+    @PostMapping("/cart")
+    public ResponseEntity<Order> saveOrder(@RequestBody List<Long> cartItems) {
+        Order savedOrder = orderService.saveOrder(cartItems);
         return ResponseEntity.ok(savedOrder);
     }
 

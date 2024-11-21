@@ -26,24 +26,22 @@ public class OrderServiceImpl implements OrderService{
     }
 
    @Transactional
-   public Order saveOrder(long cartItemId) {
+   public Order saveOrder(List<Long> cartItemsList) {
         Order order = new Order(LocalDateTime.now());
         try {
-            Cart cart = cartRepo.findById(cartItemId);
-            if (cart ==null) {
-                throw new EntityNotFoundException("CartItem not found with ID: " + cartItemId);
-            }
-            for (CartItem cartItem : cart.getCartItems()) {
+            for(Long cartItemId : cartItemsList) {
+                CartItem cartItem= orderRepo.findCartItemById(cartItemId);
                 OrderItem orderItem = new OrderItem(cartItem.getProduct(), cartItem.getQuantity());
                 orderItem.setOrder(order);
                 loggerService.logOperation("CartItem: " + cartItem.getId() + " Quantity " +cartItem.getQuantity());
                 productService.updateProduct(cartItem.getProduct().getId(),cartItem.getQuantity());
                 order.getOrderItems().add(orderItem);
             }
+
             Order savedOrder = orderRepo.save(order);
-            // Delete the CartItem after order has been saved.
-            if(savedOrder.getId()>0){
-                cartRepo.deleteById(cartItemId);
+
+            for(Long cartItemId : cartItemsList) {
+                cartRepo.deleteCartItemById(cartItemId);
             }
 
             return savedOrder;

@@ -35,38 +35,22 @@ public class AuthServiceImpl implements AuthService {
         Authentication result = null;
         try {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-           // String rawPassword = "password"; // This is the password you’re testing
-            //String storedHash = "$2a$10$7EqJtq98hPqEX7fNZaFWoOq5i6wZh0gZs8B/5LnklXfFw1VxnQ4uK"; // Replace with actual hash from the database
-           // String storedHash ="$2a$10$vyrme2l/48ewLVL6CNvuRO0PKcs7SURhc9Dt6MxnPsQyzmX2BP0l6";
-              //      encoder.encode(rawPassword);
-           // loggerService.logOperation("Stored Hash Code : " + storedHash);
-           // boolean matches = encoder.matches(rawPassword, storedHash);
-           // loggerService.logOperation("Password matches: " + matches);
-
             result = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
             );
-            loggerService.logOperation("result " +result.getName());
-            loggerService.logOperation("Login attempt successful for " + loginRequest.getUsername());
 
         } catch (BadCredentialsException e) {
             loggerService.logOperation("Login attempt failed for " + loginRequest.getUsername() + " * " +loginRequest.getPassword() + " * Bad credentials");
             throw new BadCredentialsException("Invalid email or password");
         }
 
-        loggerService.logOperation("Result " + result.getName());
         final UserDetails userDetails = userDetailsService.loadUserByUsername(result.getName());
-        loggerService.logOperation("userDetails " + userDetails.getUsername() +userDetails.getPassword() );
+        loggerService.logOperation("userDetails " + userDetails.getUsername() +userDetails.getPassword()  +" User Role ");
 
         final String accessToken = jwtUtil.generateToken(userDetails);
-        System.out.println("Access Token " +accessToken);
+        final String refreshToken = jwtUtil.doGenerateRefreshToken(loginRequest.getUsername());
 
-        loggerService.logOperation("**Access Token " +accessToken);
-        final String refreshToken = jwtUtil.generateRefreshToken(loginRequest.getUsername());
         var loginResponse = new LoginResponse(accessToken, refreshToken);
-
-        System.out.println("Login Response" +loginResponse);
-        //loggerService.logOperation("Login Response" +loginResponse);
         return loginResponse;
     }
 
@@ -79,7 +63,8 @@ public class AuthServiceImpl implements AuthService {
                 System.out.println("ACCESS TOKEN IS EXPIRED");
             else
                 System.out.println("ACCESS TOKEN IS NOT EXPIRED");
-            final String accessToken = jwtUtil.doGenerateToken(  jwtUtil.getSubject(refreshTokenRequest.getRefreshToken()));
+
+            final String accessToken = jwtUtil.doGenerateRefreshToken(jwtUtil.getSubject(refreshTokenRequest.getRefreshToken()));
             var loginResponse = new LoginResponse(accessToken, refreshTokenRequest.getRefreshToken());
             return loginResponse;
         }
