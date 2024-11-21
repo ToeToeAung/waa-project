@@ -65,14 +65,19 @@ public class OrderController {
     }
 
     @PutMapping("/status")
-    public void updateOrderStatus(@RequestParam Long orderId, @RequestParam String status) {
-        Order order = orderService.findById(orderId);
+    public void updateOrderStatus(@RequestParam Long id, @RequestParam String status) {
+        Order order = orderService.findById(id);
         //loggerService.logOperation("order " + order.getOrderDate());
         if (order != null) {
             try {
-                OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
-                orderService.updateOrderStatus(orderId, orderStatus);
-             //   loggerService.logOperation("updateOrderStatus from enum " + orderStatus);
+                OrderStatus newOrderStatus = OrderStatus.valueOf(status.toUpperCase());
+                if (order.getOrderStatus() == OrderStatus.SHIPPED || order.getOrderStatus() == OrderStatus.DELIVERED) {
+                    if (newOrderStatus == OrderStatus.CANCELED) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot cancel an order that is already shipped or delivered");
+                    }
+                }
+                orderService.updateOrderStatus(id, newOrderStatus);
+
             } catch (IllegalArgumentException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Status Value");
             }
@@ -82,19 +87,27 @@ public class OrderController {
     }
 
 
-    @PutMapping("/order-item/status")
-    public void updateOrderItemStatus(@RequestParam Long orderItemId, @RequestParam String status) {
-        OrderItem orderItem = orderService.findByOrderItemId(orderItemId);
+    @PutMapping("/order-items/status")
+    public ResponseEntity<Void> updateOrderItemStatus(@RequestParam Long id, @RequestParam String status) {
+        OrderItem orderItem = orderService.findByOrderItemId(id);
         if (orderItem != null) {
             try {
-                OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
-                orderService.updateOrderItemStatus(orderItemId, orderStatus);
+                OrderStatus newOrderStatus = OrderStatus.valueOf(status.toUpperCase());
+                loggerService.logOperation("old status " + orderItem.getOrderStatus() + " new Status " +newOrderStatus);
+                if (orderItem.getOrderStatus() == OrderStatus.SHIPPED || orderItem.getOrderStatus() == OrderStatus.DELIVERED) {
+                    if (newOrderStatus == OrderStatus.CANCELED) {
+                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot cancel an order that is already shipped or delivered");
+                    }
+                }
+                orderService.updateOrderItemStatus(id, newOrderStatus);
+
             } catch (IllegalArgumentException e) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid Status Value");
             }
         } else {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid Order");
         }
+        return ResponseEntity.ok().build();
     }
 
 
