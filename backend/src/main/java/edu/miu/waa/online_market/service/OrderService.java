@@ -12,13 +12,13 @@ import java.util.List;
 
 public interface OrderService {
    // Order saveOrder(Order order);
-    @Transactional
     Order saveOrder(List<Long> cartItems);
     List<Order> getOrderItemsBySellerId(long sellerId, long orderId);
     List<Order> findAll();
     Order findById(long id);
+    OrderItem findByOrderItemId(long orderItemId);
     void deleteById(long id);
     void deleteOrderByItemId(long productId, long orderId);
-   // int updateOrderStatus(long orderId,OrderStatus status);
-  //  int updateOrderItemStatus(long orderItemId, OrderStatus status);
+    int updateOrderStatus(long orderId,OrderStatus status);
+    int updateOrderItemStatus(long orderItemId, OrderStatus status);
 }
