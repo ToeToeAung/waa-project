@@ -17,5 +17,7 @@ export function OrderState({ state }) {
       return <Chip color="success" label="delivered" size="small" />
     case ORDER_CANCLED:
       return <Chip color="error" label="cancled" size="small" />
+    default:
+      return null
   }
 }

@@ -11,12 +11,15 @@ import React, { useEffect, useReducer } from "react"
 import { useLogin } from "../hook/auth"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
+import { useAlert } from "../hook/alert"
+import { ERR_INCORRECT_CREDENTIAL } from "../entity/error"
 
 const SET_USERNAME = "set_username"
 const SET_PASSWORD = "set_password"
 const TOGGLE_SHOW_PASSWORD = "toggle_show_password"
 
 export function Login() {
+  const alert = useAlert()
   const me = useSelector((state) => state.auth.me)
   const login = useLogin()
   const navigate = useNavigate()
@@ -94,11 +97,15 @@ export function Login() {
       <Button
         variant="contained"
         onClick={async () => {
-          await login({
-            username: state.username,
-            password: state.password,
-          })
-          navigate("/welcome")
+          try {
+            await login({
+              username: state.username,
+              password: state.password,
+            })
+            navigate("/welcome")
+          } catch (e) {
+            alert({ msg: ERR_INCORRECT_CREDENTIAL, level: "error" })
+          }
         }}
       >
         Login

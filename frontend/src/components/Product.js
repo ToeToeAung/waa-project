@@ -1,11 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Paper,
-  Rating,
-  Typography,
-} from "@mui/material"
+import { Box, Card, CardContent, Rating, Typography } from "@mui/material"
 import React from "react"
 
 export function Product({ product }) {

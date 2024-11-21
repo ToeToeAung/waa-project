@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react"
-import { Product } from "./Product"
 import {
   Box,
   Button,
@@ -10,11 +8,12 @@ import {
   Pagination,
   Paper,
   Select,
-  Slider,
   TextField,
   Typography,
 } from "@mui/material"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { Product } from "./Product"
 
 const getProducts = ({ page, pageSize }) => {
   return Promise.resolve({
