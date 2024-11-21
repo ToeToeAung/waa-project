@@ -96,6 +96,9 @@ seller:
 	[POST - change order status]
 	/seller/order-items/:id
 
+    [PUT]
+    /order-items/status?id=2&status=CANCELED - buyer/seller can cancel  the order if it is pending. After shipped/delivered, cannot be cancelled the order.
+    /order/status?id=2&status=CANCELED // whole order cancellation
 
 buyer:
 	[GET - token in header]
