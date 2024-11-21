@@ -19,7 +19,7 @@ export function Product({ product }) {
         >
           {product.description}
         </Typography>
-        <Rating value={product.rating} readOnly precision={0.5} />
+        <Rating value={product.overAllRating} readOnly precision={0.5} />
         <Typography variant="body2">${product.price}</Typography>
       </CardContent>
     </Card>

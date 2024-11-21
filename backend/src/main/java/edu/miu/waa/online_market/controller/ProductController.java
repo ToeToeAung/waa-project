@@ -119,12 +119,13 @@ public class ProductController {
 
     @DeleteMapping("/reviews")
     public void deleteReview(@RequestParam Long productId, @RequestParam Long reviewId) {
-        User user = userService.findByUsername(CurrentUser.getCurrentUser());
-        if(user.getRole().equals(Role.ADMIN)){
-            reviewService.delete(productId, reviewId);
-        }else{
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
+        reviewService.delete(productId, reviewId);
+//        User user = userService.findByUsername(CurrentUser.getCurrentUser());
+//        if(user.getRole().equals(Role.ADMIN)){
+//            reviewService.delete(productId, reviewId);
+//        }else{
+//            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+//        }
     }
 
     @GetMapping("/reviews/{id}")

@@ -18,28 +18,6 @@ import { useSelector } from "react-redux"
 import { USER_ROLE_ADMIN, USER_ROLE_BUYER } from "../entity/Auth"
 import { deleteReview } from "../api/admin"
 
-// const getProduct = (id) => {
-//   return Promise.resolve({
-//     id,
-//     name: "product 123",
-//     category: "category-1",
-//     description:
-//       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//     quantity: 20,
-//     price: 120,
-//     sellerId: 1,
-//     rating: 3.5,
-//   })
-// }
-
-// const getReviews = (productId) => {
-//   return Promise.resolve([
-//     { id: 1, content: "good", rating: 4.5 },
-//     { id: 1, content: "bad", rating: 2.5 },
-//     { id: 1, content: "very good", rating: 5 },
-//   ])
-// }
-
 const SET_CONTENT = "set_content"
 const SET_RATING = "set_rating"
 const CLEAR_FORM = "clear_form"
@@ -69,10 +47,7 @@ export function ProductDetails() {
   }, emptyForm)
 
   useEffect(() => {
-    getProductById(id).then((res) =>
-      // TODO: fix api
-      setProduct({ ...res, name: "product name" }),
-    )
+    getProductById(id).then((res) => setProduct(res))
   }, [id])
 
   const syncReview = useCallback(() => {
@@ -93,7 +68,7 @@ export function ProductDetails() {
           <Typography variant="h6">Category</Typography>
           <Typography variant="body2">{product.category.name}</Typography>
           <Typography variant="h6">Rating</Typography>
-          <Rating readOnly value={product.rating} precision={0.5} />
+          <Rating readOnly value={product.overAllRating} precision={0.5} />
           <Divider sx={{ my: 2 }} />
           <Typography variant="body1">{product.description}</Typography>
         </>
