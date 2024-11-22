@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService{
                 OrderItem orderItem = new OrderItem(cartItem.getProduct(), cartItem.getQuantity());
                 orderItem.setOrder(order);
                 loggerService.logOperation("CartItem: " + cartItem.getId() + " Quantity " +cartItem.getQuantity());
-                productService.subQuantity(cartItem.getProduct().getId(),cartItem.getQuantity());
+               // productService.subQuantity(cartItem.getProduct().getId(),cartItem.getQuantity());
                 order.getOrderItems().add(orderItem);
             }
 
@@ -99,7 +99,7 @@ public class OrderServiceImpl implements OrderService{
     public  void deleteOrderByItemId(long productId, long orderItemId) {
        User user = userService.findByUsername(CurrentUser.getCurrentUser());
        OrderItem orderItem = orderRepo.getOrderItemById(orderItemId);
-       productService.addQuantity(productId,orderItem.getQuantity());
+     //  productService.addQuantity(productId,orderItem.getQuantity());
        orderRepo.deleteOrderByItemId(productId,orderItemId);
     }
 
@@ -112,6 +112,8 @@ public class OrderServiceImpl implements OrderService{
     @Override
     @Transactional
     public int updateOrderItemStatus(long orderItemId, OrderStatus status) {
+        OrderItem orderItem = orderRepo.getOrderItemById(orderItemId);
+        productService.subQuantity(orderItem.getProduct().getId(),orderItem.getQuantity());
         return orderRepo.updateOrderItemStatus(orderItemId,status);
     }
 
