@@ -122,12 +122,12 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<OrderItem> sellerFindAllOrderItem() {
+    public List<OrderItem> sellerFindAllOrderItem(OrderStatus orderStatus) {
         User user = userService.findByUsername(CurrentUser.getCurrentUser());
         if (user == null || !user.getRole().equals(Role.SELLER)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        return orderItemRepo.findAllBySellerId(user.getId());
+        return orderItemRepo.findAllBySellerId(user.getId(), orderStatus);
     }
 
 

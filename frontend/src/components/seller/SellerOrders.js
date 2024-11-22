@@ -20,13 +20,20 @@ import {
 import { OrderState } from "../OrderState"
 import { changeOrderItemStatus, getOrderItems } from "../../api/seller"
 
+const mapOrderStatus = (status) => {
+  if (status === ORDER_ALL) return ""
+  return status
+}
+
 export function SellerOrders() {
   const [orderItems, setOrderItems] = useState([])
   const [orderStatus, setOrderStatus] = useState(ORDER_ALL)
 
   const syncOrderItem = useCallback(() => {
-    getOrderItems().then((res) => setOrderItems(res))
-  }, [setOrderItems])
+    getOrderItems({ orderStatus: mapOrderStatus(orderStatus) }).then((res) =>
+      setOrderItems(res),
+    )
+  }, [setOrderItems, orderStatus])
 
   useEffect(() => {
     syncOrderItem()
@@ -66,7 +73,8 @@ function Order({ order: o, onAction }) {
     <Paper sx={{ p: 2 }} variant="outlined">
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box>
-          <Typography variant="h6">{o.product.name}</Typography>
+          <Typography variant="h6">Order No. {o.id}</Typography>
+          <Typography>{o.product.name}</Typography>
           <Typography variant="body2">qty: {o.quantity}</Typography>
         </Box>
         <Box>

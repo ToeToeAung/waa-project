@@ -59,8 +59,8 @@ public class OrderController {
     }
 
     @GetMapping("/seller")
-    public List<OrderItem> sellerFindOrderItems() {
-        return orderService.sellerFindAllOrderItem();
+    public List<OrderItem> sellerFindOrderItems(@RequestParam(required = false) OrderStatus status) {
+        return orderService.sellerFindAllOrderItem(status);
     }
 
 
