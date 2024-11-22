@@ -1,0 +1,10 @@
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (2, '$2a$10$nVyFbVCp/AVWwSslTmthQeZ5u2luw062h4/GjV1ofXKJ4dlzfbPre', 1, 0, 'john', 2);
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (3, '$2a$10$E1BjhYUeiPeiEEOpPd2auuEF4MJFKPwzUTDcTnc6Q4RnUINJQ/Au.', 1, 0, 'emma', 3);
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (4, '$2a$10$vH5we6jClHbrqPuLC6fsAeK24dvbcWo9FheQeayvQc/HicS14wrtK', 1, 0, 'liam', 4);
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (5, '$2a$10$zZwFTBtMnWtK66mZfCzF6.hPur2bJA/dz4aUqTZmGmDUZqLwgX6Zi', 2, 2, 'noah', 5);
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (7, '$2a$10$7TZNxhQ9sx3J3ILTjLvcOegXy3yEujAcDz69HC5o1b6hOkWYSLpF.', 2, 2, 'william', 7);
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (8, '$2a$10$yPm114wQq63PZAGuGBMCBe9NFbRpI1LkIMzX1f0pVpbeonc0wZ.AS', 2, 1, 'sophia', 8);
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (9, '$2a$10$4dgaSEdD8a2AH6eYmflC4.ZGoCix57M9bSBbq1csYsscJpKUJTscq', 2, 2, 'james', 9);
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (10, '$2a$10$CHvcV/DzcT.faG21dkL1UeZ4gssyc/na.lPIPiULdprJzHtm7Q7Re', 2, 1, 'ava', 10);
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (1, '$2a$10$APp3isXjZ6MVMDAyyPd1geQqbaXjTdCuyQ3fKzGT.ol9384iBNVfS', 0, 0, 'alice', 1);
+INSERT INTO public.users (id, password, role, seller_status, username, address_id) VALUES (6, '$2a$10$kKfua3mvlV8lyxuhgyiZ/ebIgNEQIjBfYffq9TmEg556yMvHVGYj2', 2, 1, 'olivia', 6);

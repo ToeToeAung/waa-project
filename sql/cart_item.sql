@@ -1,0 +1,9 @@
+INSERT INTO public.cart_item (id, quantity, cart_id, product_id) VALUES (24, 1, 13, 3);
+INSERT INTO public.cart_item (id, quantity, cart_id, product_id) VALUES (25, 1, 13, 8);
+INSERT INTO public.cart_item (id, quantity, cart_id, product_id) VALUES (28, 1, 14, 3);
+INSERT INTO public.cart_item (id, quantity, cart_id, product_id) VALUES (29, 1, 14, 4);
+INSERT INTO public.cart_item (id, quantity, cart_id, product_id) VALUES (20, 1, 9, 4);
+INSERT INTO public.cart_item (id, quantity, cart_id, product_id) VALUES (30, 1, 9, 3);
+INSERT INTO public.cart_item (id, quantity, cart_id, product_id) VALUES (31, 1, 13, 4);
+INSERT INTO public.cart_item (id, quantity, cart_id, product_id) VALUES (32, 1, 9, 8);
+INSERT INTO public.cart_item (id, quantity, cart_id, product_id) VALUES (33, 1, 14, 8);
