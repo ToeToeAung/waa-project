@@ -115,6 +115,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Boolean addQuantity(Long productId, int quantity){
+        Product product = getProduct(productId);
+        product.setQuantity(product.getQuantity() + quantity);
+        productRepo.save(product);
+        return true;
+    }
+
+
+    @Override
     public List<Product> getProductsBySellerId(long sellerId, Integer stockQty){
         return productRepo.findProductsBySellerId(sellerId, stockQty);
     }
