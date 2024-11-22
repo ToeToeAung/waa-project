@@ -35,17 +35,7 @@ This project is an engineering proof of concept aimed at providing hands-on expe
 
 1. launch postgres database on port 5432 with username "postgres" and pasword "1"
 2. create database name "onlinemarketdb"
-3. populate data by using data from files in sql directory with following sequent
-
-   - import address.sql
-   - import users.sql
-   - import category.sql
-   - import cart.sql
-   - import product.sql
-   - import review.sql
-   - import cart_item.sql
-   - import orders.sql
-   - import order_item.sql
+3. populate data by using data from files "data.sql"
 
 #### Test credential from the populated data are as follow
 
