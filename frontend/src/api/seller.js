@@ -24,12 +24,22 @@ export async function updateStock({ productId, quantity }) {
     .then((res) => res.data)
 }
 
-export async function getProducts() {
-  return authAxios.get("/products/seller").then((res) => res.data)
+export async function getProducts({ onlyOutOfStock = false }) {
+  return authAxios
+    .get("/products/seller", {
+      params: { stockQty: onlyOutOfStock ? 0 : null },
+    })
+    .then((res) => res.data)
 }
 
 export async function deleteProductById(id) {
   return authAxios.delete(`/products/${id}`).then((res) => res.data)
+}
+
+export async function getOrderItems({ orderStatus }) {
+  return authAxios
+    .get("/orders/seller", { params: { status: orderStatus } })
+    .then((res) => res.data)
 }
 
 export async function changeOrderItemStatus({ orderItemId, status }) {

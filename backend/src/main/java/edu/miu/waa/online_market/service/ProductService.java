@@ -28,7 +28,7 @@ public interface ProductService {
     void deleteProduct(Long id);
     List<Review> findReviewsByProduct(Long id);
     Boolean subQuantity(Long productId, int quantity);
-    List<Product> getProductsBySellerId(long sellserId);
+    List<Product> getProductsBySellerId(long sellserId, Integer stockQty);
     void sellerDeleteProduct(long id);
 }
 

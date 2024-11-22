@@ -1,5 +1,5 @@
 import { Box, Button, FormControlLabel, Switch } from "@mui/material"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { SellerProduct } from "./SellerProduct"
 import { deleteProductById, getProducts } from "../../api/seller"
@@ -8,15 +8,16 @@ import { ERR_UNKNOWN } from "../../entity/error"
 
 export function SellerProducts() {
   const [products, setProducts] = useState([])
+  const [showOnlyOutOfStock, setShowOnlyOutOfStock] = useState(true)
   const alert = useAlert()
 
   const syncProduct = useCallback(() => {
-    getProducts().then((res) => {
+    getProducts({ onlyOutOfStock: showOnlyOutOfStock }).then((res) => {
       setProducts(res)
     })
-  }, [getProducts, setProducts])
+  }, [setProducts, showOnlyOutOfStock])
 
-  useState(() => {
+  useEffect(() => {
     syncProduct()
   }, [syncProduct])
 
@@ -36,7 +37,17 @@ export function SellerProducts() {
         Add product
       </Button>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <FormControlLabel control={<Switch />} label="show only out of stock" />
+        <FormControlLabel
+          control={
+            <Switch
+              checked={showOnlyOutOfStock}
+              onChange={(e) => {
+                setShowOnlyOutOfStock(e.target.checked)
+              }}
+            />
+          }
+          label="show only out of stock"
+        />
 
         {products.map((p) => (
           <SellerProduct key={p.id} product={p} onDelete={onDelete} />

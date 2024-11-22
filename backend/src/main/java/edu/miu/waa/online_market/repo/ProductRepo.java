@@ -34,8 +34,8 @@ public interface ProductRepo extends JpaRepository<Product, Long> {
     @Query("Select r From Product p Join p.reviews r Where p.id = :id")
     List<Review> findReviewsByProductId(Long id);
 
-    @Query("Select p From Product p Where p.user.id = :sellerId")
-    List<Product> findProductsBySellerId(@Param("sellerId") long sellerId);
+    @Query("Select p From Product p Where p.user.id = :sellerId and (:stockQty is null or p.quantity = :stockQty)")
+    List<Product> findProductsBySellerId(@Param("sellerId") long sellerId, Integer stockQty);
 
 
 }

@@ -2,11 +2,13 @@ package edu.miu.waa.online_market.service.impl;
 import edu.miu.waa.online_market.entity.*;
 import edu.miu.waa.online_market.entity.dto.OrderItemDto;
 import edu.miu.waa.online_market.repo.CartRepo;
+import edu.miu.waa.online_market.repo.OrderItemRepo;
 import edu.miu.waa.online_market.repo.OrderRepo;
 import edu.miu.waa.online_market.service.*;
 import edu.miu.waa.online_market.util.CurrentUser;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,19 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class OrderServiceImpl implements OrderService{
     private final LoggerService loggerService;
     private final OrderRepo orderRepo;
     private final CartRepo cartRepo;
     private final ProductService  productService;
     private final UserService userService;
-    public OrderServiceImpl(LoggerService loggerService, OrderRepo orderRepo, CartRepo cartRepo, ProductService productService,UserService userService) {
-        this.loggerService = loggerService;
-        this.orderRepo = orderRepo;
-        this.cartRepo = cartRepo;
-        this.productService = productService;
-        this.userService = userService;
-    }
+    private final OrderItemRepo orderItemRepo;
 
    @Transactional
    public Order saveOrder(List<Long> cartItemsList) {
@@ -122,6 +119,15 @@ public class OrderServiceImpl implements OrderService{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         return orderRepo.findByBuyerId(user.getId());
+    }
+
+    @Override
+    public List<OrderItem> sellerFindAllOrderItem(OrderStatus orderStatus) {
+        User user = userService.findByUsername(CurrentUser.getCurrentUser());
+        if (user == null || !user.getRole().equals(Role.SELLER)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        return orderItemRepo.findAllBySellerId(user.getId(), orderStatus);
     }
 
 

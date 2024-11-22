@@ -115,8 +115,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProductsBySellerId(long sellerId){
-        return productRepo.findProductsBySellerId(sellerId);
+    public List<Product> getProductsBySellerId(long sellerId, Integer stockQty){
+        return productRepo.findProductsBySellerId(sellerId, stockQty);
     }
 
     @Override

@@ -24,4 +24,5 @@ public interface OrderService {
     int updateOrderStatus(long orderId,OrderStatus status);
     int updateOrderItemStatus(long orderItemId, OrderStatus status);
     List<Order> buyerFindAll();
+    List<OrderItem> sellerFindAllOrderItem(OrderStatus status);
 }

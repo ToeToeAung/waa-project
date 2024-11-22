@@ -53,12 +53,12 @@ public class ProductController {
     }
 
     @GetMapping("/seller")
-    public List<Product> getProductsBySeller() {
+    public List<Product> getProductsBySeller(@RequestParam(required = false) Integer stockQty) {
         User user = userService.findByUsername(CurrentUser.getCurrentUser());
        // System.out.println("User Role "+ user.getRole() + " Role.BUYER "+Role.SELLER);
        // loggerService.logOperation("User Role "+ user.getRole() + " Role.SELLER "+Role.SELLER);
         if(user.getRole().equals(Role.SELLER)){
-            return productService.getProductsBySellerId(user.getId());
+            return productService.getProductsBySellerId(user.getId(), stockQty);
         }else{
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }

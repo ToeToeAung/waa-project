@@ -1,5 +1,5 @@
 export const ORDER_ALL = "ALL"
 export const ORDER_PENDING = "PENDING"
-export const ORDER_SHIPPING = "SHIPPED,"
+export const ORDER_SHIPPING = "SHIPPED"
 export const ORDER_DELIVERED = "DELIVERED"
 export const ORDER_CANCLED = "CANCELED"
