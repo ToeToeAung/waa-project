@@ -24,8 +24,12 @@ export async function updateStock({ productId, quantity }) {
     .then((res) => res.data)
 }
 
-export async function getProducts() {
-  return authAxios.get("/products/seller").then((res) => res.data)
+export async function getProducts({ onlyOutOfStock = false }) {
+  return authAxios
+    .get("/products/seller", {
+      params: { stockQty: onlyOutOfStock ? 0 : null },
+    })
+    .then((res) => res.data)
 }
 
 export async function deleteProductById(id) {
