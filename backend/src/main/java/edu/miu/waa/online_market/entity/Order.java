@@ -20,6 +20,9 @@ public class Order {
     private LocalDateTime orderDate;
     @Enumerated(EnumType.STRING)
     OrderStatus orderStatus;
+    @ManyToOne()
+    @JoinColumn(name = "buyer_id")
+    private User user;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "order")
     @JsonManagedReference
     private List<OrderItem> orderItems;

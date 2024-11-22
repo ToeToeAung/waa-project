@@ -1,6 +1,7 @@
 package edu.miu.waa.online_market.controller;
 import edu.miu.waa.online_market.entity.*;
 import edu.miu.waa.online_market.entity.dto.OrderDto;
+import edu.miu.waa.online_market.entity.dto.OrderItemDto;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
 import edu.miu.waa.online_market.repo.UserRepo;
 import edu.miu.waa.online_market.service.OrderService;
@@ -49,6 +50,14 @@ public class OrderController {
         return orderService.findAll();
     }
 
+    @GetMapping("/buyer")
+    public List<OrderItem> getOrderItemsByBuyerId() {
+        User user=userRepo.findByUsername(CurrentUser.getCurrentUser());
+        loggerService.logOperation("getOrderItemsBySellerId " + user.getUsername());
+        return orderService.findOrderItemByBuyerId(user.getId());
+    }
+
+
     @GetMapping("/{id}")
     public List<Order> getOrderByid(@PathVariable Long id) {
         return (List<Order>) orderService.findById(id);
@@ -93,7 +102,7 @@ public class OrderController {
         if (orderItem != null) {
             try {
                 OrderStatus newOrderStatus = OrderStatus.valueOf(status.toUpperCase());
-                loggerService.logOperation("old status " + orderItem.getOrderStatus() + " new Status " +newOrderStatus);
+               // loggerService.logOperation("old status " + orderItem.getOrderStatus() + " new Status " +newOrderStatus);
                 if (orderItem.getOrderStatus() == OrderStatus.SHIPPED || orderItem.getOrderStatus() == OrderStatus.DELIVERED) {
                     if (newOrderStatus == OrderStatus.CANCELED) {
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot cancel an order that is already shipped or delivered");

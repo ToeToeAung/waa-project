@@ -1,5 +1,6 @@
 package edu.miu.waa.online_market.repo;
 import edu.miu.waa.online_market.entity.*;
+import edu.miu.waa.online_market.entity.dto.OrderItemDto;
 import edu.miu.waa.online_market.entity.dto.ProductDto;
 import org.aspectj.weaver.ast.Or;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +22,9 @@ public interface OrderRepo  extends JpaRepository<Order, Long> {
 
     @Query("SELECT o FROM OrderItem o WHERE o.id = :orderItemId")
     OrderItem getOrderItemById(@Param("orderItemId") long orderItemId);
+
+    @Query("SELECT d FROM Order o JOIN o.orderItems d WHERE o.user.id = :buyerId")
+    List<OrderItem> getOrderItemByBuyerId(@Param("buyerId") long buyerId);
 
     @Query("SELECT o FROM Order o JOIN o.orderItems d WHERE d.product.user.id = :sellerId AND o.id = :orderId")
     List<Order> getOrderItemsBySellerId(@Param("sellerId") long sellerId, @Param("orderId") long orderId);
