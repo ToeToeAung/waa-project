@@ -1,7 +1,7 @@
 import { Cancel } from "@mui/icons-material"
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-import * as XLSX from "xlsx";
+import jsPDF from "jspdf"
+import "jspdf-autotable"
+import * as XLSX from "xlsx"
 
 import {
   Box,
@@ -122,35 +122,35 @@ function exportToExcel(order) {
   const data = order.items.map((item) => ({
     Product: item.product.name,
     Price: item.product.price,
-    Quantity: item.quantity   
-  }));
+    Quantity: item.quantity,
+  }))
 
-  const worksheet = XLSX.utils.json_to_sheet(data);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, `Order_${order.id}`);
-  XLSX.writeFile(workbook, `Order_${order.id}.xlsx`);
+  const worksheet = XLSX.utils.json_to_sheet(data)
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, worksheet, `Order_${order.id}`)
+  XLSX.writeFile(workbook, `Order_${order.id}.xlsx`)
 }
 
 function exportToPDF(order) {
-  const doc = new jsPDF();
+  const doc = new jsPDF()
 
-  doc.text(`Invoice No. ${order.id}`, 10, 10);
+  doc.text(`Invoice No. ${order.id}`, 10, 10)
 
   // Add table for items
   const items = order.items.map((item) => [
     item.product.name,
     item.product.price,
-    item.quantity    
-  ]);
+    item.quantity,
+  ])
 
   doc.autoTable({
     head: [["Product Name", "Price", "Quantity", "State"]],
     body: items,
     startY: 20,
-  });
+  })
 
   // Save the PDF
-  doc.save(`Order_${order.id}.pdf`);
+  doc.save(`Order_${order.id}.pdf`)
 }
 
 function Order({ order }) {
@@ -159,7 +159,7 @@ function Order({ order }) {
       <Typography variant="h6">Invoice No. {order.id}</Typography>
       <List>
         {order.items.map((oi) => (
-            <OrderItem key={oi} item={oi} />
+          <OrderItem key={oi} item={oi} />
         ))}
       </List>
       <Divider sx={{ mt: 2, mb: 2 }} />

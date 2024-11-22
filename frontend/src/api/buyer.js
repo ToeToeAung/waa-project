@@ -25,3 +25,7 @@ export async function addItemToCart({ productId, quantity }) {
 export async function deleteItemFromCart({ itemId }) {
   return authAxios.delete(`/cart/items/${itemId}`).then((res) => res.data)
 }
+
+export async function checkout(cartItemIds) {
+  return authAxios.post("/orders/cart", cartItemIds).then((res) => res.data)
+}
