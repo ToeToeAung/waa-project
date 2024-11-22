@@ -8,7 +8,7 @@ import { ERR_UNKNOWN } from "../../entity/error"
 
 export function SellerProducts() {
   const [products, setProducts] = useState([])
-  const [showOnlyOutOfStock, setShowOnlyOutOfStock] = useState(true)
+  const [showOnlyOutOfStock, setShowOnlyOutOfStock] = useState(false)
   const alert = useAlert()
 
   const syncProduct = useCallback(() => {
