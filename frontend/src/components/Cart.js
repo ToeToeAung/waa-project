@@ -71,12 +71,14 @@ export function Cart() {
               <Typography variant="h6">Total</Typography>
               <Typography>
                 $
-                {cartItems.reduce((sum, cur) => {
-                  if (checkoutItems.has(cur.id)) {
-                    sum += cur.product.price * cur.quantity
-                  }
-                  return sum
-                }, 0)}
+                {Number(
+                  cartItems.reduce((sum, cur) => {
+                    if (checkoutItems.has(cur.id)) {
+                      sum += cur.product.price * cur.quantity
+                    }
+                    return sum
+                  }, 0),
+                ).toFixed(2)}
               </Typography>
             </Box>
             <Button

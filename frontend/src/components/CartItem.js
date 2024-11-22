@@ -39,7 +39,7 @@ export function CartItem({ cartItem, checked, onChange }) {
         <Checkbox checked={checked} onChange={onChange} />
         <Box>
           <Typography variant="h6">{p.name}</Typography>
-          <Typography variant="body2">${p.price}</Typography>
+          <Typography variant="body2">${Number(p.price).toFixed(2)}</Typography>
           <TextField
             sx={{ mt: 2, width: 80 }}
             label="quantity"
@@ -66,7 +66,7 @@ export function CartItem({ cartItem, checked, onChange }) {
       </Box>
       <Divider sx={{ mt: 2, mb: 2 }} />
       <Typography sx={{ ml: 4 }} variant="body2">
-        ${p.price * cartItem.quantity}
+        ${Number(p.price * cartItem.quantity).toFixed(2)}
       </Typography>
     </Paper>
   )
