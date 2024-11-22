@@ -34,6 +34,10 @@ export function useLogin() {
       await login({ username, password })
       const me = await getMe()
       dispatch(authAction.setMe(me))
+      if (me.role === USER_ROLE_BUYER) {
+        const cart = await getCart()
+        dispatch(cartAction.setCart(cart?.cartItems || []))
+      }
     },
     [dispatch],
   )
@@ -45,6 +49,6 @@ export function useLogout() {
   return useCallback(async () => {
     await logout()
     dispatch(authAction.setMe(null))
-    dispatch(cartAction.setCart(null))
+    dispatch(cartAction.setCart([]))
   }, [dispatch])
 }
