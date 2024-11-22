@@ -12,48 +12,17 @@ import {
 import React, { useState } from "react"
 import { CartItem } from "./CartItem"
 import { useSelector } from "react-redux"
-
-// const cartItems = [
-//   {
-//     id: 1,
-//     cartId: 1,
-//     quantity: 2,
-//     product: {
-//       id: 1,
-//       name: "product 123",
-//       category: "category-1",
-//       description:
-//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//       quantity: 20,
-//       price: 120,
-//       sellerId: 1,
-//       rating: 3.5,
-//     },
-//   },
-//   {
-//     id: 2,
-//     cartId: 1,
-//     quantity: 2,
-//     product: {
-//       id: 2,
-//       name: "product 456",
-//       category: "category-1",
-//       description:
-//         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//       quantity: 20,
-//       price: 120,
-//       sellerId: 1,
-//       rating: 4,
-//     },
-//   },
-// ]
+import { useCheckout } from "../hook/cart"
+import { useNavigate } from "react-router-dom"
 
 export function Cart() {
+  const navigate = useNavigate()
   const cartItems = useSelector((state) => state.cart.cartItems || [])
   const [checkoutItems, setCheckoutItems] = useState(
     new Set(cartItems.map((c) => c.id)),
   )
   const [openPaymentDialog, setOpenPaymentDialog] = useState(false)
+  const checkout = useCheckout()
 
   const closePaymentDialog = () => {
     setOpenPaymentDialog(false)
@@ -125,7 +94,14 @@ export function Cart() {
         <DialogTitle>Confirm payment</DialogTitle>
         <DialogActions>
           <Button onClick={closePaymentDialog}>Cancle</Button>
-          <Button>Ok</Button>
+          <Button
+            onClick={async () => {
+              await checkout(Array.from(checkoutItems))
+              navigate("/orders")
+            }}
+          >
+            Ok
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

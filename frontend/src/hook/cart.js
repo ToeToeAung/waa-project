@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { addItemToCart } from "../api/buyer"
+import { addItemToCart, checkout, getCart } from "../api/buyer"
 import { cartAction } from "../store"
 import { useDispatch } from "react-redux"
 
@@ -19,5 +19,18 @@ export function useAddItemToCart() {
       }
     },
     [dispatch, addItemToCart],
+  )
+}
+
+export function useCheckout() {
+  const dispatch = useDispatch()
+
+  return useCallback(
+    async (cartItemIds) => {
+      await checkout(cartItemIds)
+      const cart = await getCart()
+      dispatch(cartAction.setCart(cart?.cartItems || []))
+    },
+    [dispatch, checkout, getCart],
   )
 }
