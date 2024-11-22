@@ -18,7 +18,7 @@ export function useAddItemToCart() {
         console.error(e)
       }
     },
-    [dispatch, addItemToCart],
+    [dispatch],
   )
 }
 
@@ -31,6 +31,6 @@ export function useCheckout() {
       const cart = await getCart()
       dispatch(cartAction.setCart(cart?.cartItems || []))
     },
-    [dispatch, checkout, getCart],
+    [dispatch],
   )
 }

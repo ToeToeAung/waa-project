@@ -4,8 +4,28 @@ export async function getCategories() {
   return publicAxois.get("/categories").then((res) => res.data)
 }
 
-export async function getProducts() {
-  return publicAxois.get("/products/filter").then((res) => res.data)
+export async function getProducts({
+  pageSize,
+  page,
+  categoryId,
+  ratingGt,
+  ratingLt,
+  priceGt,
+  priceLt,
+}) {
+  return publicAxois
+    .get("/products/filter", {
+      params: {
+        categoryId,
+        pageSize,
+        ratingGt,
+        ratingLt,
+        priceGt,
+        priceLt,
+        page: page - 1,
+      },
+    })
+    .then((res) => res.data)
 }
 
 export async function getProductById(id) {
