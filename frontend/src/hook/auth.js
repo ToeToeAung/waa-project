@@ -45,5 +45,6 @@ export function useLogout() {
   return useCallback(async () => {
     await logout()
     dispatch(authAction.setMe(null))
+    dispatch(cartAction.setCart(null))
   }, [dispatch])
 }
