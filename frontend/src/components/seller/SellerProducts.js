@@ -1,10 +1,10 @@
 import { Box, Button, FormControlLabel, Switch } from "@mui/material"
 import React, { useCallback, useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { SellerProduct } from "./SellerProduct"
 import { deleteProductById, getProducts } from "../../api/seller"
+import { ERR_PRODUCT_ALREADY_BOUGTH } from "../../entity/error"
 import { useAlert } from "../../hook/alert"
-import { ERR_UNKNOWN } from "../../entity/error"
+import { SellerProduct } from "./SellerProduct"
 
 export function SellerProducts() {
   const [products, setProducts] = useState([])
@@ -27,7 +27,7 @@ export function SellerProducts() {
       alert({ msg: "product deleted", level: "success" })
       syncProduct()
     } catch (e) {
-      alert({ msg: ERR_UNKNOWN, level: "error" })
+      alert({ msg: ERR_PRODUCT_ALREADY_BOUGTH, level: "error" })
     }
   }
 
