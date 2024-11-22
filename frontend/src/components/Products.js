@@ -17,24 +17,22 @@ import { Product } from "./Product"
 import { getCategories } from "../api/public"
 import { getProducts } from "../api/public"
 
-const PAGE_SIZE = 8
+const PAGE_SIZE = 4
 
 export function Products() {
   const [productData, setProductData] = useState(null)
   const [page, setPage] = useState(1)
+  const [filter, setFilter] = useState({})
+
   useEffect(() => {
-    getProducts({ page, pageSize: PAGE_SIZE }).then((res) =>
+    getProducts({ ...filter, page, pageSize: PAGE_SIZE }).then((res) =>
       setProductData(res),
     )
-  }, [])
-
-  const onFilter = (filter) => {
-    console.log("here", filter)
-  }
+  }, [page, filter])
 
   return (
     <Box sx={{ display: "flex", gap: 4, justifyContent: "space-between" }}>
-      <Filter onFilter={onFilter} />
+      <Filter onFilter={(filter) => setFilter(filter)} />
       {!productData ? (
         "loading"
       ) : (
@@ -54,7 +52,7 @@ export function Products() {
           </Grid2>
           <Pagination
             sx={{ marginTop: 2 }}
-            count={productData.totalPage}
+            count={productData.totalPages}
             color="primary"
             page={page}
             onChange={(e, v) => setPage(v)}
@@ -78,7 +76,6 @@ const SET_RATING_FILTER_GT = "set_rating_filter_gt"
 const SET_RATING_FILTER_LT = "set_rating_filter_lt"
 
 function Filter({ onFilter }) {
-  const [rating, setRating] = useState([0, 5])
   const [categories, setCategories] = useState([])
   const [state, dispatch] = useReducer(
     (state, action) => {
