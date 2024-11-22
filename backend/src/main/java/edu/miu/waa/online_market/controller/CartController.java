@@ -1,19 +1,14 @@
 package edu.miu.waa.online_market.controller;
 
 import edu.miu.waa.online_market.entity.Cart;
-import edu.miu.waa.online_market.entity.Order;
 import edu.miu.waa.online_market.entity.User;
+import edu.miu.waa.online_market.entity.dto.request.AddCartItemRequest;
 import edu.miu.waa.online_market.repo.UserRepo;
 import edu.miu.waa.online_market.service.CartService;
 import edu.miu.waa.online_market.service.LoggerService;
-import edu.miu.waa.online_market.service.OrderService;
 import edu.miu.waa.online_market.util.CurrentUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/cart")
@@ -50,5 +45,21 @@ public class CartController {
         User user=userRepo.findByUsername(CurrentUser.getCurrentUser());
         loggerService.logOperation("deleteCartItemById " + user.getUsername());
         cartService.deleteCartItemById(user.getId(),productId);
+    }
+
+
+    @GetMapping()
+    public Cart getCart() {
+        return cartService.getCart();
+    }
+
+    @PostMapping("/items")
+    public Cart addCartItem(@RequestBody AddCartItemRequest req) {
+        return cartService.addCartItem(req);
+    }
+
+    @DeleteMapping("/items/{id}")
+    public Cart removeCartItem(@PathVariable long id) {
+        return cartService.removeCartItem(id);
     }
 }

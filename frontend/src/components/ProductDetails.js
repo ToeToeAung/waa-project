@@ -17,6 +17,7 @@ import { ERR_INCORRECT_CREDENTIAL, ERR_UNKNOWN } from "../entity/error"
 import { useSelector } from "react-redux"
 import { USER_ROLE_ADMIN, USER_ROLE_BUYER } from "../entity/Auth"
 import { deleteReview } from "../api/admin"
+import { useAddItemToCart } from "../hook/cart"
 
 const SET_CONTENT = "set_content"
 const SET_RATING = "set_rating"
@@ -30,6 +31,8 @@ const emptyForm = {
 export function ProductDetails() {
   const { id } = useParams()
   const me = useSelector((state) => state.auth.me)
+  const addItemToCart = useAddItemToCart()
+  const [quantity, setQuantity] = useState(1)
   const alert = useAlert()
   const [product, setProduct] = useState()
   const [reviews, setReviews] = useState()
@@ -76,13 +79,28 @@ export function ProductDetails() {
       {me?.role === USER_ROLE_BUYER && (
         <>
           <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <Button variant="contained">Add to cart</Button>
+            <Button
+              variant="contained"
+              onClick={async () => {
+                try {
+                  await addItemToCart({ productId: product.id, quantity })
+                  alert({ msg: "added to cart", level: "success" })
+                } catch (e) {
+                  console.error(e)
+                }
+              }}
+            >
+              Add to cart
+            </Button>
             <TextField
               label="quantity"
               type="number"
               size="small"
               sx={{ width: 80 }}
-              value={1}
+              value={quantity}
+              onChange={(e) => {
+                setQuantity(e.target.value)
+              }}
             />
           </Box>
           <Typography variant="h6" sx={{ mt: 4 }}>
