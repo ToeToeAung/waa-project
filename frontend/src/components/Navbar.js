@@ -49,6 +49,7 @@ const routes = [
 
 export function Navbar() {
   const me = useSelector((state) => state.auth.me)
+  const cartItems = useSelector((state) => state.cart.cartItems)
   const naviagte = useNavigate()
   const logout = useLogout()
 
@@ -94,7 +95,7 @@ export function Navbar() {
           <div>
             {me.role === USER_ROLE_BUYER && (
               <IconButton component={Link} to="/cart" sx={{ color: "white" }}>
-                <Badge badgeContent={5} color="error">
+                <Badge badgeContent={cartItems?.length} color="error">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>

@@ -10,6 +10,7 @@ import edu.miu.waa.online_market.service.CartService;
 import edu.miu.waa.online_market.service.UserService;
 import edu.miu.waa.online_market.service.LoggerService;
 import edu.miu.waa.online_market.util.ListMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,27 +20,17 @@ import java.util.List;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepo userRepo;
-    private final CartService cartService;
     private final LoggerService loggerService;
     private final ListMapper listMapper;
-    @Autowired
-    public UserServiceImpl(UserRepo userRepo, CartService cartService,LoggerService loggerService,
-                           ListMapper listMapper) {
-        this.userRepo = userRepo;
-        this.cartService = cartService;
-        this.loggerService = loggerService;
-        this.listMapper = listMapper;
-    }
 
     public void createUser(User user) {
         String user1= CurrentUser.getCurrentUser();
         loggerService.logOperation("Current User is "+ user1);
         user.setSellerStatus(SellerStatus.NONE);
         if(user.getRole() == Role.BUYER){
-            Cart cart = new Cart(user);
-            cartService.CreateCart(cart);
         }else if(user.getRole() == Role.SELLER){
             user.setSellerStatus(SellerStatus.PENDING);
         }
