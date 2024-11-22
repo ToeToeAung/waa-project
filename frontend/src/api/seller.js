@@ -32,6 +32,10 @@ export async function deleteProductById(id) {
   return authAxios.delete(`/products/${id}`).then((res) => res.data)
 }
 
+export async function getOrderItems() {
+  return authAxios.get("/orders/seller").then((res) => res.data)
+}
+
 export async function changeOrderItemStatus({ orderItemId, status }) {
   return authAxios
     .put("/orders/order-items/status", null, {

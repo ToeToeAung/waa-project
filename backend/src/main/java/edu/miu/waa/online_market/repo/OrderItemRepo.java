@@ -5,8 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface OrderItemRepo extends JpaRepository<OrderItem, Long> {
     @Query("select count(o) from OrderItem o where o.product.id = :productId")
     int countByProductId(long productId);
+
+    @Query("select o from OrderItem o where o.product.user.id = :sellerId")
+    List<OrderItem> findAllBySellerId(long sellerId);
 }

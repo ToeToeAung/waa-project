@@ -3,7 +3,6 @@ import jsPDF from "jspdf"
 import "jspdf-autotable"
 import * as XLSX from "xlsx"
 import { cancleOrder, getOrderHistory } from "../api/buyer"
-
 import {
   Box,
   Button,
@@ -19,84 +18,6 @@ import {
 import React, { useCallback, useEffect, useState } from "react"
 import { ORDER_PENDING } from "../entity/OrderStatus"
 import { OrderState } from "./OrderState"
-
-// const getOrders = () => {
-//   return Promise.resolve(
-//     Array(4)
-//       .fill(null)
-//       .map((_, idx) => ({
-//         id: idx + 1,
-//         buyerId: 1,
-//         date: new Date(),
-//         items: [
-//           {
-//             id: 1,
-//             quantity: 10,
-//             state: ORDER_PENDING,
-//             product: {
-//               id: 1,
-//               name: "product 123",
-//               category: "category-1",
-//               description:
-//                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//               quantity: 20,
-//               price: 120,
-//               sellerId: 1,
-//               rating: 3.5,
-//             },
-//           },
-//           {
-//             id: 2,
-//             quantity: 10,
-//             state: ORDER_SHIPPING,
-//             product: {
-//               id: 1,
-//               name: "product 123",
-//               category: "category-1",
-//               description:
-//                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//               quantity: 20,
-//               price: 120,
-//               sellerId: 1,
-//               rating: 3.5,
-//             },
-//           },
-//           {
-//             id: 3,
-//             quantity: 10,
-//             state: ORDER_DELIVERED,
-//             product: {
-//               id: 1,
-//               name: "product 123",
-//               category: "category-1",
-//               description:
-//                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//               quantity: 20,
-//               price: 120,
-//               sellerId: 1,
-//               rating: 3.5,
-//             },
-//           },
-//           {
-//             id: 4,
-//             quantity: 10,
-//             state: ORDER_CANCLED,
-//             product: {
-//               id: 1,
-//               name: "product 123",
-//               category: "category-1",
-//               description:
-//                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//               quantity: 20,
-//               price: 120,
-//               sellerId: 1,
-//               rating: 3.5,
-//             },
-//           },
-//         ],
-//       })),
-//   )
-// }
 
 export function OrderHistory() {
   const [orders, setOrders] = useState([])
