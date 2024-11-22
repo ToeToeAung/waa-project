@@ -43,7 +43,7 @@ public class OrderServiceImpl implements OrderService{
                 OrderItem orderItem = new OrderItem(cartItem.getProduct(), cartItem.getQuantity());
                 orderItem.setOrder(order);
                 loggerService.logOperation("CartItem: " + cartItem.getId() + " Quantity " +cartItem.getQuantity());
-                productService.updateProduct(cartItem.getProduct().getId(),cartItem.getQuantity());
+                productService.subQuantity(cartItem.getProduct().getId(),cartItem.getQuantity());
                 order.getOrderItems().add(orderItem);
             }
 
@@ -96,8 +96,11 @@ public class OrderServiceImpl implements OrderService{
         orderRepo.deleteById(id);
     }
 
-    public  void deleteOrderByItemId(long productId, long orderId) {
-        orderRepo.deleteOrderByItemId(productId,orderId);
+    public  void deleteOrderByItemId(long productId, long orderItemId) {
+       User user = userService.findByUsername(CurrentUser.getCurrentUser());
+       OrderItem orderItem = orderRepo.getOrderItemById(orderItemId);
+       productService.addQuantity(productId,orderItem.getQuantity());
+       orderRepo.deleteOrderByItemId(productId,orderItemId);
     }
 
     @Override

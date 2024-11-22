@@ -30,5 +30,6 @@ public interface ProductService {
     Boolean subQuantity(Long productId, int quantity);
     List<Product> getProductsBySellerId(long sellserId, Integer stockQty);
     void sellerDeleteProduct(long id);
+    Boolean addQuantity(Long productId, int quantity);
 }
 
