@@ -31,3 +31,11 @@ export async function getProducts() {
 export async function deleteProductById(id) {
   return authAxios.delete(`/products/${id}`).then((res) => res.data)
 }
+
+export async function changeOrderItemStatus({ orderItemId, status }) {
+  return authAxios
+    .put("/orders/order-items/status", null, {
+      params: { id: orderItemId, status },
+    })
+    .then((res) => res.data)
+}

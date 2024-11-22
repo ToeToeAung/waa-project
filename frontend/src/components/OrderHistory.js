@@ -2,6 +2,7 @@ import { Cancel } from "@mui/icons-material"
 import jsPDF from "jspdf"
 import "jspdf-autotable"
 import * as XLSX from "xlsx"
+import { cancleOrder, getOrderHistory } from "../api/buyer"
 
 import {
   Box,
@@ -15,111 +16,121 @@ import {
   Paper,
   Typography,
 } from "@mui/material"
-import React, { useEffect, useState } from "react"
-import {
-  ORDER_CANCLED,
-  ORDER_DELIVERED,
-  ORDER_PENDING,
-  ORDER_SHIPPING,
-} from "../entity/OrderStatus"
+import React, { useCallback, useEffect, useState } from "react"
+import { ORDER_PENDING } from "../entity/OrderStatus"
 import { OrderState } from "./OrderState"
 
-const getOrders = () => {
-  return Promise.resolve(
-    Array(4)
-      .fill(null)
-      .map((_, idx) => ({
-        id: idx + 1,
-        buyerId: 1,
-        date: new Date(),
-        items: [
-          {
-            id: 1,
-            quantity: 10,
-            state: ORDER_PENDING,
-            product: {
-              id: 1,
-              name: "product 123",
-              category: "category-1",
-              description:
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-              quantity: 20,
-              price: 120,
-              sellerId: 1,
-              rating: 3.5,
-            },
-          },
-          {
-            id: 2,
-            quantity: 10,
-            state: ORDER_SHIPPING,
-            product: {
-              id: 1,
-              name: "product 123",
-              category: "category-1",
-              description:
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-              quantity: 20,
-              price: 120,
-              sellerId: 1,
-              rating: 3.5,
-            },
-          },
-          {
-            id: 3,
-            quantity: 10,
-            state: ORDER_DELIVERED,
-            product: {
-              id: 1,
-              name: "product 123",
-              category: "category-1",
-              description:
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-              quantity: 20,
-              price: 120,
-              sellerId: 1,
-              rating: 3.5,
-            },
-          },
-          {
-            id: 4,
-            quantity: 10,
-            state: ORDER_CANCLED,
-            product: {
-              id: 1,
-              name: "product 123",
-              category: "category-1",
-              description:
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-              quantity: 20,
-              price: 120,
-              sellerId: 1,
-              rating: 3.5,
-            },
-          },
-        ],
-      })),
-  )
-}
+// const getOrders = () => {
+//   return Promise.resolve(
+//     Array(4)
+//       .fill(null)
+//       .map((_, idx) => ({
+//         id: idx + 1,
+//         buyerId: 1,
+//         date: new Date(),
+//         items: [
+//           {
+//             id: 1,
+//             quantity: 10,
+//             state: ORDER_PENDING,
+//             product: {
+//               id: 1,
+//               name: "product 123",
+//               category: "category-1",
+//               description:
+//                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+//               quantity: 20,
+//               price: 120,
+//               sellerId: 1,
+//               rating: 3.5,
+//             },
+//           },
+//           {
+//             id: 2,
+//             quantity: 10,
+//             state: ORDER_SHIPPING,
+//             product: {
+//               id: 1,
+//               name: "product 123",
+//               category: "category-1",
+//               description:
+//                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+//               quantity: 20,
+//               price: 120,
+//               sellerId: 1,
+//               rating: 3.5,
+//             },
+//           },
+//           {
+//             id: 3,
+//             quantity: 10,
+//             state: ORDER_DELIVERED,
+//             product: {
+//               id: 1,
+//               name: "product 123",
+//               category: "category-1",
+//               description:
+//                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+//               quantity: 20,
+//               price: 120,
+//               sellerId: 1,
+//               rating: 3.5,
+//             },
+//           },
+//           {
+//             id: 4,
+//             quantity: 10,
+//             state: ORDER_CANCLED,
+//             product: {
+//               id: 1,
+//               name: "product 123",
+//               category: "category-1",
+//               description:
+//                 "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+//               quantity: 20,
+//               price: 120,
+//               sellerId: 1,
+//               rating: 3.5,
+//             },
+//           },
+//         ],
+//       })),
+//   )
+// }
 
 export function OrderHistory() {
   const [orders, setOrders] = useState([])
-  useEffect(() => {
-    getOrders().then((res) => {
+
+  const syncOrder = useCallback(() => {
+    getOrderHistory().then((res) => {
       setOrders(res)
     })
-  }, [])
+  }, [setOrders])
+
+  useEffect(() => {
+    syncOrder()
+  }, [syncOrder])
+
+  const onOrderItemCancle = async (orderItemId) => {
+    try {
+      await cancleOrder(orderItemId)
+      syncOrder()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
       {orders.map((o) => (
-        <Order key={o.id} order={o} />
+        <Order key={o.id} order={o} onOrderItemCancle={onOrderItemCancle} />
       ))}
     </Box>
   )
 }
 
 function exportToExcel(order) {
-  const data = order.items.map((item) => ({
+  const data = order.orderItems.map((item) => ({
     Product: item.product.name,
     Price: item.product.price,
     Quantity: item.quantity,
@@ -137,10 +148,11 @@ function exportToPDF(order) {
   doc.text(`Invoice No. ${order.id}`, 10, 10)
 
   // Add table for items
-  const items = order.items.map((item) => [
+  const items = order.orderItems.map((item) => [
     item.product.name,
     item.product.price,
     item.quantity,
+    item.orderStatus,
   ])
 
   doc.autoTable({
@@ -153,13 +165,13 @@ function exportToPDF(order) {
   doc.save(`Order_${order.id}.pdf`)
 }
 
-function Order({ order }) {
+function Order({ order, onOrderItemCancle }) {
   return (
     <Paper sx={{ p: 2 }} variant="outlined">
       <Typography variant="h6">Invoice No. {order.id}</Typography>
       <List>
-        {order.items.map((oi) => (
-          <OrderItem key={oi} item={oi} />
+        {order.orderItems.map((oi) => (
+          <OrderItem key={oi} item={oi} onOrderItemCancle={onOrderItemCancle} />
         ))}
       </List>
       <Divider sx={{ mt: 2, mb: 2 }} />
@@ -172,19 +184,24 @@ function Order({ order }) {
   )
 }
 
-function OrderItem({ item }) {
+function OrderItem({ item, onOrderItemCancle }) {
   return (
     <ListItem
       secondaryAction={
-        item.state === ORDER_PENDING ? (
-          <IconButton edge="end">
+        item.orderStatus === ORDER_PENDING ? (
+          <IconButton edge="end" onClick={() => onOrderItemCancle(item.id)}>
             <Cancel />
           </IconButton>
         ) : null
       }
     >
-      <ListItemText primary={item.product.name} />
-      <OrderState state={item.state} />
+      <ListItemText
+        primary={item.product.name}
+        secondary={`qty: ${item.quantity}, $${item.product.price} | total: $${
+          item.quantity * item.product.price
+        }`}
+      />
+      <OrderState state={item.orderStatus} />
     </ListItem>
   )
 }

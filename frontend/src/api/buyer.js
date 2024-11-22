@@ -1,3 +1,4 @@
+import { ORDER_CANCLED } from "../entity/OrderStatus"
 import { authAxios } from "./fetcher"
 
 export async function addReview({ productId, content, rating }) {
@@ -28,4 +29,16 @@ export async function deleteItemFromCart({ itemId }) {
 
 export async function checkout(cartItemIds) {
   return authAxios.post("/orders/cart", cartItemIds).then((res) => res.data)
+}
+
+export async function getOrderHistory() {
+  return authAxios.get("/orders/buyer").then((res) => res.data)
+}
+
+export async function cancleOrder(id) {
+  return authAxios
+    .put("/orders/order-items/status", null, {
+      params: { id, status: ORDER_CANCLED },
+    })
+    .then((res) => res.data)
 }

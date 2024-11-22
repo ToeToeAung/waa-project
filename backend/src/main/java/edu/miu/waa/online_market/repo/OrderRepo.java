@@ -38,4 +38,7 @@ public interface OrderRepo  extends JpaRepository<Order, Long> {
     @Modifying
     @Query("UPDATE OrderItem o SET o.orderStatus = :status WHERE o.id = :orderItemId")
     int updateOrderItemStatus(@Param("orderItemId") long orderItemId, @Param("status") OrderStatus status);
+
+    @Query("select o from Order o where o.user.id = :buyerId")
+    List<Order> findByBuyerId(long buyerId);
 }

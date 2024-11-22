@@ -23,4 +23,5 @@ public interface OrderService {
     void deleteOrderByItemId(long productId, long orderId);
     int updateOrderStatus(long orderId,OrderStatus status);
     int updateOrderItemStatus(long orderItemId, OrderStatus status);
+    List<Order> buyerFindAll();
 }
