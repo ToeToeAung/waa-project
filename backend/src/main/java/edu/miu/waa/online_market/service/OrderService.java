@@ -3,6 +3,7 @@ import edu.miu.waa.online_market.entity.Order;
 import edu.miu.waa.online_market.entity.OrderItem;
 import edu.miu.waa.online_market.entity.OrderStatus;
 import edu.miu.waa.online_market.entity.dto.OrderDto;
+import edu.miu.waa.online_market.entity.dto.OrderItemDto;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,7 @@ public interface OrderService {
     List<Order> findAll();
     Order findById(long id);
     OrderItem findByOrderItemId(long orderItemId);
+    List<OrderItem> findOrderItemByBuyerId(long buyerId);
     void deleteById(long id);
     void deleteOrderByItemId(long productId, long orderId);
     int updateOrderStatus(long orderId,OrderStatus status);

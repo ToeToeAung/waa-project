@@ -30,4 +30,7 @@ public interface CartRepo extends JpaRepository<Cart, Long> {
 
     @Query("select c from Cart c where c.user.id = :userId")
     Optional<Cart> findByUserId(long userId);
+
+    @Query("select count(o.id) from CartItem o where o.cart.id = :cartId")
+    int findItemCountByCartId(long cartId);
 }

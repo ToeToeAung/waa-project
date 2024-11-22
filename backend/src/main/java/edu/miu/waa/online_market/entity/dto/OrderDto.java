@@ -9,5 +9,5 @@ import java.util.List;
 public class OrderDto {
     private Long id;
     private LocalDateTime orderDate;
-    private List<OrderItem> orderItems;
+    private List<OrderItemDto> orderItems;
 }

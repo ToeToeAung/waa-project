@@ -16,7 +16,7 @@ public class OrderItem {
     @Enumerated(EnumType.STRING)
     OrderStatus orderStatus;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
