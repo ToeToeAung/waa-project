@@ -30,3 +30,57 @@ This project is an engineering proof of concept aimed at providing hands-on expe
 | Managed packages, folders, and files                                                                                                                                                                                                                                                      | 2     | ✅   |
 | UI                                                                                                                                                                                                                                                                                        | --    |      |
 | Buyers can filter the products – examples of filters are mentioned below, select common ones                                                                                                                                                                                              | 2     | ✅   |
+
+## Installation
+
+1. launch postgres database on port 5432 with username "postgres" and pasword "1"
+2. create database name "onlinemarketdb"
+3. populate data by using data from files in sql directory with following sequent
+
+   - import address.sql
+   - import users.sql
+   - import category.sql
+   - import cart.sql
+   - import product.sql
+   - import review.sql
+   - import cart_item.sql
+   - import orders.sql
+   - import order_item.sql
+
+#### Test credential from the populated data are as follow
+
+| UserRole | Username | Password  | Status   |
+| -------- | -------- | --------- | -------- |
+| Admin    | alice    | admin123  | --       |
+| Buyer    | john     | buyer123  | --       |
+|          | emma     | buyer234  | --       |
+|          | liam     | buyer345  | --       |
+| Seller   | noah     | seller123 | Approved |
+|          | william  | seller345 | Approved |
+|          | james    | seller567 | Approved |
+|          | olivia   | seller234 | Pending  |
+|          | sophia   | seller456 | Pending  |
+|          | ava      | seller678 | Pending  |
+
+4. cd to backend directory and run backend on port 8080
+
+```bash
+cd backend
+mvn spring-boot:run
+```
+
+5. cd to frontden directory, install dependencies and run frontend on port 3000
+
+```bash
+cd frontend
+npm i
+npm start
+```
+
+# Group member
+
+| Name         | Student ID |
+| ------------ | ---------- |
+| Hua Zhou     | 618082     |
+| Sarun Tapee  | 618056     |
+| Toe Toe Aung | 618090     |
