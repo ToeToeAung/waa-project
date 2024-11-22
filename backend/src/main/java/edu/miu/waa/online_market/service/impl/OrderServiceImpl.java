@@ -70,8 +70,8 @@ public class OrderServiceImpl implements OrderService{
         }
     }
     @Override
-     public List<Order> getOrderItemsBySellerId(long sellerId, long orderId) {
-        return orderRepo.getOrderItemsBySellerId(sellerId,orderId);
+     public List<OrderItem> getOrderItemsBySellerId(long sellerId) {
+        return orderRepo.getOrderItemsBySellerId(sellerId);
     }
 
     @Override

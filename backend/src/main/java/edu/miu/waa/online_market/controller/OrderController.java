@@ -38,11 +38,11 @@ public class OrderController {
         return ResponseEntity.ok(savedOrder);
     }
 
-    @GetMapping("/seller/{id}")
-    public List<Order> getOrderItemsBySellerId(@PathVariable Long id) {
+    @GetMapping("/seller")
+    public List<OrderItem> getOrderItemsBySellerId() {
         User user=userRepo.findByUsername(CurrentUser.getCurrentUser());
         loggerService.logOperation("getOrderItemsBySellerId " + user.getUsername());
-        return orderService.getOrderItemsBySellerId(user.getId(),id);
+        return orderService.getOrderItemsBySellerId(user.getId());
     }
 
     @GetMapping()

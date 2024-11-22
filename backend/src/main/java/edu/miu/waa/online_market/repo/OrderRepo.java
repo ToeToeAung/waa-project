@@ -26,8 +26,8 @@ public interface OrderRepo  extends JpaRepository<Order, Long> {
     @Query("SELECT d FROM Order o JOIN o.orderItems d WHERE o.user.id = :buyerId")
     List<OrderItem> getOrderItemByBuyerId(@Param("buyerId") long buyerId);
 
-    @Query("SELECT o FROM Order o JOIN o.orderItems d WHERE d.product.user.id = :sellerId AND o.id = :orderId")
-    List<Order> getOrderItemsBySellerId(@Param("sellerId") long sellerId, @Param("orderId") long orderId);
+    @Query("SELECT d FROM Order o JOIN o.orderItems d WHERE d.product.user.id = :sellerId")
+    List<OrderItem> getOrderItemsBySellerId(@Param("sellerId") long sellerId);
 
     @Query("Select c From CartItem c Where c.id = :cartItemId")
     CartItem findCartItemById(@Param("cartItemId") long cartItemId);

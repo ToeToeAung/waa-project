@@ -14,7 +14,7 @@ import java.util.List;
 public interface OrderService {
    // Order saveOrder(Order order);
     Order saveOrder(List<Long> cartItems);
-    List<Order> getOrderItemsBySellerId(long sellerId, long orderId);
+    List<OrderItem> getOrderItemsBySellerId(long sellerId);
     List<Order> findAll();
     Order findById(long id);
     OrderItem findByOrderItemId(long orderItemId);
