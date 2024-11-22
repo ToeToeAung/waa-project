@@ -177,7 +177,6 @@ export function Register(props) {
           }
           const error = validateForm()
           if (Object.keys(error).length !== 0) {
-            console.log("here", error)
             dispatch({ type: SET_ERROR, error })
             return
           } else {
