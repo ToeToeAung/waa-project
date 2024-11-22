@@ -1,27 +1,27 @@
 import {
   Box,
   Button,
-  Paper,
   Divider,
+  Paper,
   Rating,
-  TextareaAutosize,
-  Typography,
   TextField,
+  Typography,
 } from "@mui/material"
 import React, { useCallback, useEffect, useReducer, useState } from "react"
-import { useParams } from "react-router-dom"
-import { getProductById, getReviews } from "../api/public"
-import { addReview } from "../api/buyer"
-import { useAlert } from "../hook/alert"
-import { ERR_INCORRECT_CREDENTIAL, ERR_UNKNOWN } from "../entity/error"
 import { useSelector } from "react-redux"
-import { USER_ROLE_ADMIN, USER_ROLE_BUYER } from "../entity/Auth"
+import { useParams } from "react-router-dom"
 import { deleteReview } from "../api/admin"
+import { addReview } from "../api/buyer"
+import { getProductById, getReviews } from "../api/public"
+import { USER_ROLE_ADMIN, USER_ROLE_BUYER } from "../entity/Auth"
+import { ERR_EMPTY, ERR_UNKNOWN } from "../entity/error"
+import { useAlert } from "../hook/alert"
 import { useAddItemToCart } from "../hook/cart"
 
 const SET_CONTENT = "set_content"
 const SET_RATING = "set_rating"
 const CLEAR_FORM = "clear_form"
+const SET_ERROR = "set_error"
 
 const emptyForm = {
   content: "",
@@ -44,6 +44,8 @@ export function ProductDetails() {
         return { ...state, rating: action.rating }
       case CLEAR_FORM:
         return { ...emptyForm }
+      case SET_ERROR:
+        return { ...state, error: action.error }
       default:
         return state
     }
@@ -60,6 +62,14 @@ export function ProductDetails() {
   useEffect(() => {
     syncReview()
   }, [syncReview])
+
+  const validateForm = () => {
+    const error = {}
+    if (!state.content) {
+      error.content = ERR_EMPTY
+    }
+    return error
+  }
 
   return (
     <Box>
@@ -112,8 +122,11 @@ export function ProductDetails() {
               value={state.rating}
               onChange={(e, v) => dispatch({ type: SET_RATING, rating: v })}
             />
-            <TextareaAutosize
-              minRows={5}
+            <TextField
+              error={!!state.error?.content}
+              helperText={state.error?.content}
+              multiline
+              minRows={3}
               value={state.content}
               onChange={(e) =>
                 dispatch({ type: SET_CONTENT, content: e.target.value })
@@ -124,6 +137,12 @@ export function ProductDetails() {
             sx={{ mt: 1 }}
             variant="outlined"
             onClick={async () => {
+              const error = validateForm()
+              if (Object.keys(error).length !== 0) {
+                dispatch({ type: SET_ERROR, error })
+                return
+              }
+              dispatch({ type: SET_ERROR, error: null })
               try {
                 await addReview({
                   productId: id,
