@@ -115,4 +115,14 @@ public class OrderServiceImpl implements OrderService{
         return orderRepo.updateOrderItemStatus(orderItemId,status);
     }
 
+    @Override
+    public List<Order> buyerFindAll() {
+        User user = userService.findByUsername(CurrentUser.getCurrentUser());
+        if (user == null || !user.getRole().equals(Role.BUYER)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+        return orderRepo.findByBuyerId(user.getId());
+    }
+
+
 }

@@ -51,10 +51,11 @@ public class OrderController {
     }
 
     @GetMapping("/buyer")
-    public List<OrderItem> getOrderItemsByBuyerId() {
-        User user=userRepo.findByUsername(CurrentUser.getCurrentUser());
-        loggerService.logOperation("getOrderItemsBySellerId " + user.getUsername());
-        return orderService.findOrderItemByBuyerId(user.getId());
+    public List<Order> getOrderItemsByBuyerId() {
+        return orderService.buyerFindAll();
+//        User user=userRepo.findByUsername(CurrentUser.getCurrentUser());
+//        loggerService.logOperation("getOrderItemsBySellerId " + user.getUsername());
+//        return orderService.findOrderItemByBuyerId(user.getId());
     }
 
 

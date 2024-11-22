@@ -8,15 +8,11 @@ export function useAddItemToCart() {
 
   return useCallback(
     async ({ productId, quantity }) => {
-      try {
-        const cart = await addItemToCart({
-          productId,
-          quantity,
-        })
-        dispatch(cartAction.setCart(cart?.cartItems || []))
-      } catch (e) {
-        console.error(e)
-      }
+      const cart = await addItemToCart({
+        productId,
+        quantity,
+      })
+      dispatch(cartAction.setCart(cart?.cartItems || []))
     },
     [dispatch],
   )
