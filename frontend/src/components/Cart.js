@@ -28,6 +28,11 @@ export function Cart() {
     setOpenPaymentDialog(false)
   }
 
+  const onDelete = (cartItemId) => {
+    checkoutItems.delete(cartItemId)
+    setCheckoutItems(new Set(checkoutItems))
+  }
+
   return (
     <Box>
       <Typography variant="h4">Cart</Typography>
@@ -63,6 +68,7 @@ export function Cart() {
                     }
                     setCheckoutItems(new Set(checkoutItems))
                   }}
+                  onDelete={onDelete}
                 />
               ))}
             </Box>

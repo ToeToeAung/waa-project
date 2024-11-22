@@ -1,22 +1,22 @@
 import { Delete } from "@mui/icons-material"
 import {
-  Paper,
-  Typography,
-  Checkbox,
   Box,
-  TextField,
+  Checkbox,
   Divider,
   IconButton,
+  Paper,
+  TextField,
+  Typography,
 } from "@mui/material"
-import React, { useState, useEffect } from "react"
-import { addItemToCart, deleteItemFromCart } from "../api/buyer"
+import React, { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { cartAction } from "../store"
-import { useAlert } from "../hook/alert"
+import { deleteItemFromCart } from "../api/buyer"
 import { ERR_UNKNOWN } from "../entity/error"
+import { useAlert } from "../hook/alert"
 import { useAddItemToCart } from "../hook/cart"
+import { cartAction } from "../store"
 
-export function CartItem({ cartItem, checked, onChange }) {
+export function CartItem({ cartItem, checked, onChange, onDelete }) {
   const { product: p } = cartItem
   const [quantity, setQuantity] = useState(cartItem.quantity)
   const dispatch = useDispatch()
@@ -24,6 +24,7 @@ export function CartItem({ cartItem, checked, onChange }) {
   const addItemToCart = useAddItemToCart()
 
   useEffect(() => {
+    if (quantity === cartItem.quantity) return
     const timeId = setTimeout(async () => {
       addItemToCart({ productId: p.id, quantity })
     }, 500)
@@ -31,7 +32,7 @@ export function CartItem({ cartItem, checked, onChange }) {
     return () => {
       clearTimeout(timeId)
     }
-  }, [quantity])
+  }, [quantity, addItemToCart, p.id, cartItem.quantity])
 
   return (
     <Paper sx={{ p: 2 }} variant="outlined">
@@ -55,6 +56,7 @@ export function CartItem({ cartItem, checked, onChange }) {
             try {
               const cart = await deleteItemFromCart({ itemId: cartItem.id })
               dispatch(cartAction.setCart(cart?.cartItems || []))
+              onDelete?.(cartItem.id)
               alert({ msg: "removed from cart", level: "success" })
             } catch (e) {
               alert({ msg: ERR_UNKNOWN, level: "error" })
